@@ -1,0 +1,41 @@
+{
+  "name": "terminal_eda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "@guivic/fastify-socket.io": "^0.1.2",
+    "axios": "^0.20.0",
+    "fastify": "^3.0.0",
+    "fastify-autoload": "^3.0.2",
+    "fastify-cli": "^2.2.0",
+    "fastify-plugin": "^2.0.0",
+    "mssql": "^6.2.1",
+    "node-fetch": "^2.6.0",
+    "pg": "^8.3.3",
+    "sequelize": "^6.3.4",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "tap": "^14.0.0"
+  },
+  "scripts": {
+    "test": "tap test/**/*.test.js",
+    "start": "fastify start -l info app.js",
+    "dev": "fastify start -w -l info -P app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ekspil/terminal_eda.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ekspil/terminal_eda/issues"
+  },
+  "homepage": "https://github.com/ekspil/terminal_eda#readme"
+}
