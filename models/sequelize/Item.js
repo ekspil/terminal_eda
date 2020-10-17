@@ -8,14 +8,19 @@ const Item = {
         autoIncrement: true
     },
     liveTime: {
-        type: Sequelize.DataTypes.INTEGER
+        type: Sequelize.DataTypes.INTEGER,
+        field: "live_time"
     },
     minCount: {
-        type: Sequelize.DataTypes.INTEGER
+        type: Sequelize.DataTypes.INTEGER,
+        field: "min_count"
     },
     name: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
+    },
+    station: {
+        type: Sequelize.DataTypes.INTEGER,
     },
     createdAt: {
         type: Sequelize.DataTypes.DATE,

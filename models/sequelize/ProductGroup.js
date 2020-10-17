@@ -11,12 +11,6 @@ const Product = {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
     },
-    items: {
-        type: Sequelize.DataTypes.ARRAY(Sequelize.DataTypes.INTEGER)
-    },
-    station: {
-        type: Sequelize.DataTypes.INTEGER,
-    },
     createdAt: {
         type: Sequelize.DataTypes.DATE,
         allowNull: true,

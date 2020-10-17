@@ -18,27 +18,93 @@ module.exports = async function (fastify, opts) {
   const User = require("./models/sequelize/User")
   const Product = require("./models/sequelize/Product")
   const Item = require("./models/sequelize/Item")
+  const ProductGroup = require("./models/sequelize/ProductGroup")
+  global.Orders = []
 
 
 
   const UserModel = sequelize.define("users", User)
-  const ProductModel = sequelize.define("product", Product)
-  const ItemModel = sequelize.define("item", Item)
+  const ProductModel = sequelize.define("products", Product)
+  const ItemModel = sequelize.define("items", Item)
+  const ProductGroupModel = sequelize.define("product_groups", ProductGroup)
+
+  ProductModel.belongsTo(ProductGroupModel, {
+    foreignKey: "group_id",
+    as: "group"
+  })
+
+  // await sequelize.sync({force: true})
+  // const us = [
+  //   {name: "Ефремов Алексей", login: "admin", password: "admin", role: "ADMIN"},
+  //   {name: "Шилова Екатерина", login: "user", password: "user", role: "USER"},
+  // ]
+  //
+  // const its = [
+  //   {name: "Макароны", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Бульон", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Лапша", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Бекон", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Колбаски", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Сыр", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Зелень", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Ушки", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Перец", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Соль", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Огурчики", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Помидорчики", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Клюква", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Хлеб", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Вода", liveTime: 1000, minCount: 3, station: 1},
+  // ]
+  //
+  // const gs = [
+  //   {name: "Роял"},
+  //   {name: "Компот"}
+  // ]
+  //
+  // const ps = [
+  //   {name: "Суп", items: [2], station: 1},
+  //   {name: "Бутерброд", items: [1, 2], station: 1},
+  //   {name: "Омлет", items: [1, 2, 3], station: 2},
+  // ]
+  //
+  //
+  // await UserModel.bulkCreate(us)
+  // await ItemModel.bulkCreate(its)
+  // await ProductGroupModel.bulkCreate(gs)
+  // await ProductModel.bulkCreate(ps)
+
+
 
   const Order = require("./services/OrderService")
+  const DB = require("./services/DBService")
 
 
-
-  await fastify.register(require('@guivic/fastify-socket.io'), opts, (error) => console.error(error));
 
 
   opts.order = new Order({
     UserModel,
     ItemModel,
     ProductModel,
+    ProductGroupModel,
     io: fastify.io
   })
 
+  opts.db = new DB({
+    UserModel,
+    ItemModel,
+    ProductModel,
+    ProductGroupModel,
+    io: fastify.io
+  })
+
+  fastify.register(require('fastify-cors'), {
+
+    credentials: true,
+    origin: true
+  })
+
+  await fastify.register(require('@guivic/fastify-socket.io'), {path: '/io'}, (error) => console.error(error));
   // Do not touch the following lines
 
   // This loads all plugins defined in plugins
