@@ -35,8 +35,8 @@ module.exports = async function (fastify, opts) {
 
   // await sequelize.sync({force: true})
   // const us = [
-  //   {name: "Ефремов Алексей", login: "admin", password: "admin", role: "ADMIN"},
-  //   {name: "Шилова Екатерина", login: "user", password: "user", role: "USER"},
+  //   {name: "Ефремов Алексей", login: "admin@admin.ru", password: "admin", role: "ADMIN"},
+  //   {name: "Шилова Екатерина", login: "user@user.ru", password: "user", role: "USER"},
   // ]
   //
   // const its = [
@@ -63,8 +63,8 @@ module.exports = async function (fastify, opts) {
   // ]
   //
   // const ps = [
-  //   {name: "Суп", items: [2], station: 1},
-  //   {name: "Бутерброд", items: [1, 2], station: 1},
+  //   {name: "Суп", items: [2], station: 1, code: "СВ-92232"},
+  //   {name: "Бутерброд", items: [1, 2], station: 1, code: "СВ-92231"},
   //   {name: "Омлет", items: [1, 2, 3], station: 2},
   // ]
   //
