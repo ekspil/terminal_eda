@@ -15,6 +15,7 @@
     "fastify-cors": "^4.1.0",
     "fastify-plugin": "^2.0.0",
     "fastify-socket.io": "0.0.4",
+    "fastify-static": "^3.3.0",
     "mssql": "^6.2.1",
     "node-fetch": "^2.6.0",
     "pg": "^8.3.3",

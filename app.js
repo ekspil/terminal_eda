@@ -123,6 +123,12 @@ module.exports = async function (fastify, opts) {
     io: fastify.io
   })
 
+  fastify.register(require('fastify-static'), {
+    root: path.join(__dirname, 'public'),
+    prefix: '/', // optional: default '/'
+  })
+
+
   // Start functions
 
   await opts.order.startItems()
