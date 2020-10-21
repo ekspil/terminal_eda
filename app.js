@@ -11,7 +11,8 @@ module.exports = async function (fastify, opts) {
   const sequelizeOptions = {
     host: process.env.POSTGRES_HOST,
     dialect: "postgres",
-    ssl: false
+    ssl: false,
+    logging: !!Number(process.env.SQL_LOGS)
   }
   const sequelize = new Sequelize(process.env.POSTGRES_DB, process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, sequelizeOptions)
 
