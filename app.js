@@ -37,47 +37,47 @@ module.exports = async function (fastify, opts) {
     as: "group"
   })
 
-  await sequelize.sync({force: true})
-  const us = [
-    {name: "Ефремов Алексей", login: "admin@admin.ru", password: "admin", role: "ADMIN"},
-    {name: "Шилова Екатерина", login: "user@user.ru", password: "user", role: "USER"},
-  ]
-
-  const its = [
-    {name: "Макароны", liveTime: 1, minCount: 1, station: 7},
-    {name: "Бульон", liveTime: 2, minCount: 1, station: 7},
-    {name: "Лапша", liveTime: 3, minCount: 2, station: 7},
-    {name: "Бекон", liveTime: 4, minCount: 4, station: 7},
-    {name: "Колбаски", liveTime: 5, minCount: 2, station: 7},
-    {name: "Сыр", liveTime: 2, minCount: 2, station: 7},
-    {name: "Зелень", liveTime: 1, minCount: 3, station: 7},
-    {name: "Ушки", liveTime: 2, minCount: 2, station: 7},
-    {name: "Перец", liveTime: 1, minCount: 3, station: 7},
-    {name: "Соль", liveTime: 2, minCount: 3, station: 7},
-    {name: "Огурчики", liveTime: 1, minCount: 3, station: 7},
-    {name: "Помидорчики", liveTime: 2, minCount: 3, station: 7},
-    {name: "Клюква", liveTime: 3, minCount: 3, station: 7},
-    {name: "Хлеб", liveTime: 3, minCount: 3, station: 7},
-    {name: "Вода", liveTime: 4, minCount: 3, station: 7},
-  ]
-
-  const gs = [
-    {name: "Роял"},
-    {name: "Компот"}
-  ]
-
-  const ps = [
-    {name: "Суп", items: [2], station: 1, code: "СВ-92232"},
-    {name: "Бутерброд", items: [1, 2], station: 1, code: "СВ-92231"},
-    {name: "Омлет", items: [1, 2, 3, 4, 5, 6, 7, 8], station: 2},
-  ]
-
-
-  await UserModel.bulkCreate(us)
-  await ItemModel.bulkCreate(its)
-  await ProductGroupModel.bulkCreate(gs)
-  await ProductModel.bulkCreate(ps)
-
+  // await sequelize.sync({force: true})
+  // const us = [
+  //   {name: "Ефремов Алексей", login: "admin@admin.ru", password: "admin", role: "ADMIN"},
+  //   {name: "Шилова Екатерина", login: "user@user.ru", password: "user", role: "USER"},
+  // ]
+  //
+  // const its = [
+  //   {name: "Макароны", liveTime: 1, minCount: 1, station: 7},
+  //   {name: "Бульон", liveTime: 2, minCount: 1, station: 7},
+  //   {name: "Лапша", liveTime: 3, minCount: 2, station: 7},
+  //   {name: "Бекон", liveTime: 4, minCount: 4, station: 7},
+  //   {name: "Колбаски", liveTime: 5, minCount: 2, station: 7},
+  //   {name: "Сыр", liveTime: 2, minCount: 2, station: 7},
+  //   {name: "Зелень", liveTime: 1, minCount: 3, station: 7},
+  //   {name: "Ушки", liveTime: 2, minCount: 2, station: 7},
+  //   {name: "Перец", liveTime: 1, minCount: 3, station: 7},
+  //   {name: "Соль", liveTime: 2, minCount: 3, station: 7},
+  //   {name: "Огурчики", liveTime: 1, minCount: 3, station: 7},
+  //   {name: "Помидорчики", liveTime: 2, minCount: 3, station: 7},
+  //   {name: "Клюква", liveTime: 3, minCount: 3, station: 7},
+  //   {name: "Хлеб", liveTime: 3, minCount: 3, station: 7},
+  //   {name: "Вода", liveTime: 4, minCount: 3, station: 7},
+  // ]
+  //
+  // const gs = [
+  //   {name: "Роял"},
+  //   {name: "Компот"}
+  // ]
+  //
+  // const ps = [
+  //   {name: "Суп", items: [2], station: 1, code: "СВ-92232"},
+  //   {name: "Бутерброд", items: [1, 2], station: 1, code: "СВ-92231"},
+  //   {name: "Омлет", items: [1, 2, 3, 4, 5, 6, 7, 8], station: 2},
+  // ]
+  //
+  //
+  // await UserModel.bulkCreate(us)
+  // await ItemModel.bulkCreate(its)
+  // await ProductGroupModel.bulkCreate(gs)
+  // await ProductModel.bulkCreate(ps)
+  //
 
 
   const Order = require("./services/OrderService")
