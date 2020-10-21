@@ -1,13 +1,14 @@
 
 
-class Product {
+class Item {
 
-    constructor({id, name, liveTime, minCount}) {
+    constructor({id, name, station, liveTime, minCount}) {
         this.id = id
         this.name = name
+        this.station = station
         this.liveTime = liveTime
         this.minCount = minCount
     }
 }
 
-module.exports = Product
+module.exports = Item

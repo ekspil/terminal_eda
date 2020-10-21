@@ -16,14 +16,18 @@ module.exports = async function (fastify, opts) {
   const sequelize = new Sequelize(process.env.POSTGRES_DB, process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, sequelizeOptions)
 
   const User = require("./models/sequelize/User")
+  const Smena = require("./models/sequelize/Smena")
   const Product = require("./models/sequelize/Product")
   const Item = require("./models/sequelize/Item")
   const ProductGroup = require("./models/sequelize/ProductGroup")
   global.Orders = []
+  global.Items = []
+  global.K = 1
 
 
 
   const UserModel = sequelize.define("users", User)
+  const SmenaModel = sequelize.define("smenas", Smena)
   const ProductModel = sequelize.define("products", Product)
   const ItemModel = sequelize.define("items", Item)
   const ProductGroupModel = sequelize.define("product_groups", ProductGroup)
@@ -40,21 +44,21 @@ module.exports = async function (fastify, opts) {
   // ]
   //
   // const its = [
-  //   {name: "Макароны", liveTime: 1000, minCount: 3, station: 1},
-  //   {name: "Бульон", liveTime: 1000, minCount: 3, station: 1},
-  //   {name: "Лапша", liveTime: 1000, minCount: 3, station: 1},
-  //   {name: "Бекон", liveTime: 1000, minCount: 3, station: 1},
-  //   {name: "Колбаски", liveTime: 1000, minCount: 3, station: 1},
-  //   {name: "Сыр", liveTime: 1000, minCount: 3, station: 1},
-  //   {name: "Зелень", liveTime: 1000, minCount: 3, station: 1},
-  //   {name: "Ушки", liveTime: 1000, minCount: 3, station: 1},
-  //   {name: "Перец", liveTime: 1000, minCount: 3, station: 1},
-  //   {name: "Соль", liveTime: 1000, minCount: 3, station: 1},
-  //   {name: "Огурчики", liveTime: 1000, minCount: 3, station: 1},
-  //   {name: "Помидорчики", liveTime: 1000, minCount: 3, station: 1},
-  //   {name: "Клюква", liveTime: 1000, minCount: 3, station: 1},
-  //   {name: "Хлеб", liveTime: 1000, minCount: 3, station: 1},
-  //   {name: "Вода", liveTime: 1000, minCount: 3, station: 1},
+  //   {name: "Макароны", liveTime: 1, minCount: 1, station: 7},
+  //   {name: "Бульон", liveTime: 2, minCount: 1, station: 7},
+  //   {name: "Лапша", liveTime: 3, minCount: 2, station: 7},
+  //   {name: "Бекон", liveTime: 4, minCount: 4, station: 7},
+  //   {name: "Колбаски", liveTime: 5, minCount: 2, station: 7},
+  //   {name: "Сыр", liveTime: 2, minCount: 2, station: 7},
+  //   {name: "Зелень", liveTime: 1, minCount: 3, station: 7},
+  //   {name: "Ушки", liveTime: 2, minCount: 2, station: 7},
+  //   {name: "Перец", liveTime: 1, minCount: 3, station: 7},
+  //   {name: "Соль", liveTime: 2, minCount: 3, station: 7},
+  //   {name: "Огурчики", liveTime: 1, minCount: 3, station: 7},
+  //   {name: "Помидорчики", liveTime: 2, minCount: 3, station: 7},
+  //   {name: "Клюква", liveTime: 3, minCount: 3, station: 7},
+  //   {name: "Хлеб", liveTime: 3, minCount: 3, station: 7},
+  //   {name: "Вода", liveTime: 4, minCount: 3, station: 7},
   // ]
   //
   // const gs = [
@@ -65,7 +69,7 @@ module.exports = async function (fastify, opts) {
   // const ps = [
   //   {name: "Суп", items: [2], station: 1, code: "СВ-92232"},
   //   {name: "Бутерброд", items: [1, 2], station: 1, code: "СВ-92231"},
-  //   {name: "Омлет", items: [1, 2, 3], station: 2},
+  //   {name: "Омлет", items: [1, 2, 3, 4, 5, 6, 7, 8], station: 2},
   // ]
   //
   //
@@ -78,25 +82,9 @@ module.exports = async function (fastify, opts) {
 
   const Order = require("./services/OrderService")
   const DB = require("./services/DBService")
+  const Schedule = require("./services/ScheduleService")
 
 
-
-
-  opts.order = new Order({
-    UserModel,
-    ItemModel,
-    ProductModel,
-    ProductGroupModel,
-    io: fastify.io
-  })
-
-  opts.db = new DB({
-    UserModel,
-    ItemModel,
-    ProductModel,
-    ProductGroupModel,
-    io: fastify.io
-  })
 
   fastify.register(require('fastify-cors'), {
 
@@ -106,6 +94,48 @@ module.exports = async function (fastify, opts) {
 
   await fastify.register(require('@guivic/fastify-socket.io'), {path: '/io'}, (error) => console.error(error));
   // Do not touch the following lines
+
+
+  opts.order = new Order({
+    UserModel,
+    ItemModel,
+    ProductModel,
+    ProductGroupModel,
+    SmenaModel,
+    io: fastify.io
+  })
+
+  opts.db = new DB({
+    UserModel,
+    ItemModel,
+    ProductModel,
+    ProductGroupModel,
+    SmenaModel,
+    io: fastify.io
+  })
+
+  opts.schedule = new Schedule({
+    UserModel,
+    ItemModel,
+    ProductModel,
+    ProductGroupModel,
+    SmenaModel,
+    io: fastify.io
+  })
+
+  // Start functions
+
+  await opts.order.startItems()
+  setInterval(()=> {
+    opts.schedule.checkItemsDie()
+  }, 20000)
+  setInterval(()=> {
+    opts.schedule.checkNeedItems()
+  }, 5000)
+
+
+  //////////////////
+
 
   // This loads all plugins defined in plugins
   // those should be support plugins that are reused

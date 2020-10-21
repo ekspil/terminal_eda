@@ -11,8 +11,37 @@ module.exports = async function (fastify, opts) {
 
   fastify.post('/api/terminal/order/change', async (request, reply)=>{
     const data = await  order.change(request.body)
+
     try {
       await fastify.io.emit("fullCheck", data)
+      
+      await fastify.io.emit("fullItems", global.Items)
+      return {ok: true}
+    }catch(e){
+      return{ok: false}
+    }
+
+
+  })
+
+  fastify.post('/api/terminal/order/setReadyItem', async (request, reply)=>{
+
+    try {
+      const data = await  order.setReadyItem(request.body)
+      await fastify.io.emit("fullItems", data)
+      return {ok: true}
+    }catch(e){
+      return{ok: false}
+    }
+
+
+  })
+
+  fastify.post('/api/terminal/order/setDieItem', async (request, reply)=>{
+
+    try {
+      const data = await  order.setDieItem(request.body)
+      await fastify.io.emit("fullItems", data)
       return {ok: true}
     }catch(e){
       return{ok: false}
@@ -23,6 +52,16 @@ module.exports = async function (fastify, opts) {
   fastify.get('/api/terminal/order/all', async (request, reply)=>{
     try {
       await fastify.io.emit("fullCheck", Orders)
+      return {ok: true}
+    }catch(e){
+      return{ok: false}
+    }
+
+
+  })
+  fastify.get('/api/terminal/order/allItems', async (request, reply)=>{
+    try {
+      await fastify.io.emit("fullItems", Items)
       return {ok: true}
     }catch(e){
       return{ok: false}
