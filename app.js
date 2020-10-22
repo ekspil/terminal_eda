@@ -87,14 +87,17 @@ module.exports = async function (fastify, opts) {
 
 
 
+
+  await fastify.register(require('@guivic/fastify-socket.io'), {path: '/io', origins: '*:*'}, (error) => console.error(error));
+  // Do not touch the following lines
+  fastify.io.origins('*:*')
+
   fastify.register(require('fastify-cors'), {
 
     credentials: true,
     origin: true
   })
 
-  await fastify.register(require('@guivic/fastify-socket.io'), {path: '/io'}, (error) => console.error(error));
-  // Do not touch the following lines
 
 
   opts.order = new Order({
