@@ -165,13 +165,14 @@ class Order {
         }
 
         for (let item of data.positions){
+            const info = item.bill_info.split('/')
             const poss = {
                 id: item.id,
-                name: item.name,
+                name: info[0],
                 price: item.price,
-                count: item.quantity,
-                code: "",
-                station: "",
+                count: Number(item[1]),
+                code: Number(item[3]),
+                station: Number(item[2]),
                 mods: []
 
             }
