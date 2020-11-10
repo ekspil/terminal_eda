@@ -7,9 +7,18 @@ class Order {
         this.ItemModel = ItemModel
         this.io = io
         this.checkItems = this.checkItems.bind(this)
+        this.superdostavka = this.superdostavka.bind(this)
     }
 
-    async change(data){
+
+    async change(data, flag){
+        if(flag === "superdostavka"){
+            data = this.superdostavka(data, {action: "PAYED"})
+        }
+        if(flag === "superdostavka_upd"){
+            data = this.superdostavka(data, {action: "UPDATE"})
+        }
+
         if (data.action === "DELETE") {
             global.Orders = global.Orders.filter(order => order.id !== data.id);
         } else {
@@ -133,6 +142,55 @@ class Order {
             }
 
         }
+    }
+
+    superdostavka(data, opts){
+        const order = {
+            id: "SD-"+String(data.id).substr(-5),
+            die: 0,
+            alarm: 0,
+            action: opts.action,
+            payed: 1,
+            ready: 0,
+            takeOut: 1,
+            type: "DELIVERY",
+            source: data.source,
+            flag: "",
+            amount: data.sum,
+            guestName: data.client_name,
+            extId: "",
+            text: data.comment,
+            pin: "",
+            positions: []
+        }
+
+        for (let item of data.positions){
+            const poss = {
+                id: item.id,
+                name: item.name,
+                price: item.price,
+                count: item.quantity,
+                code: "",
+                station: "",
+                mods: []
+
+            }
+            order.positions.push(poss)
+        }
+
+
+        if(data.source === "mobile_app"){
+            if(data.is_pickup_app && data.pickup_takeaway){
+                data.type = "APP_OUT"
+            }
+            if(data.is_pickup_app && !data.pickup_takeaway){
+                data.type = "APP_IN"
+            }
+
+        }
+
+
+        return order
     }
 }
 module.exports = Order

@@ -7,7 +7,36 @@ const ProductDTO = require("../models/dto/product")
 
 module.exports = async function (fastify, opts) {
 
-  const {order, db} = opts
+  const {order, db, fetch} = opts
+
+
+  fastify.get('/api/terminal/ext/new', async (request, reply) => {
+    if(request.query.key !== process.env.KEY) return {ok: false, error: 403, text: "INVALID KEY"}
+    const result = await fetch('https://terminaleda.ru/common_api/order/'+request.query.order_id+'?apikey='+process.env.API_KEY, {
+      method: "GET"
+    })
+    const json = await result.json()
+    const data = await order.change(json, "superdostavka")
+    await fastify.io.emit("fullCheck", data)
+
+    await fastify.io.emit("fullItems", global.Items)
+    return {ok: true}
+  })
+
+  fastify.get('/api/terminal/ext/update', async (request, reply) => {
+
+    if(request.query.key !== process.env.KEY) return {ok: false, error: 403, text: "INVALID KEY"}
+    const result = await fetch('https://terminaleda.ru/common_api/order/'+request.query.order_id+'?apikey='+process.env.API_KEY, {
+      method: "GET"
+    })
+
+    const json = await result.json()
+    const data = await order.change(json, "superdostavka_upd")
+    await fastify.io.emit("fullCheck", data)
+
+    await fastify.io.emit("fullItems", global.Items)
+    return {ok: true}
+  })
 
   fastify.post('/api/terminal/order/change', async (request, reply)=>{
     const data = await  order.change(request.body)

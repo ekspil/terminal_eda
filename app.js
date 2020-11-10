@@ -3,6 +3,7 @@ require("dotenv").config()
 const path = require('path')
 const AutoLoad = require('fastify-autoload')
 const Sequelize = require("sequelize")
+const fetch = require("node-fetch")
 
 
 module.exports = async function (fastify, opts) {
@@ -93,7 +94,6 @@ module.exports = async function (fastify, opts) {
   fastify.io.origins('*:*')
 
   fastify.register(require('fastify-cors'), {
-
     credentials: true,
     origin: true
   })
@@ -117,6 +117,8 @@ module.exports = async function (fastify, opts) {
     SmenaModel,
     io: fastify.io
   })
+
+  opts.fetch = fetch
 
   opts.schedule = new Schedule({
     UserModel,
