@@ -165,27 +165,53 @@ class Order {
         }
 
         for (let item of data.positions){
-            const info = item.bill_info.split('/')
-            const poss = {
-                id: item.id,
-                name: info[0],
-                price: item.price,
-                count: Number(item[1]),
-                code: Number(item[3]),
-                station: Number(item[2]),
-                mods: []
 
+            if(item.bill_info && item.bill_info.trim()){
+                const info = item.bill_info.split('/')
+                for(let i of info){
+                    if(!i) continue
+                    i = i.split(",")
+                    i = i.map(el=> el.trim())
+                    const poss = {
+                        id: i[3],
+                        name: i[0],
+                        price: i[4] || (item.price / i.length),
+                        count: Number(i[1]),
+                        code: i[3],
+                        station: Number(i[2]),
+                        mods: []
+
+                    }
+                    order.positions.push(poss)
+
+                }
             }
-            order.positions.push(poss)
+             else{
+                const poss = {
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    count: item.quantity,
+                    code: item.id,
+                    station: 1,
+                    mods: []
+
+                }
+                order.positions.push(poss)
+            }
+
+
         }
 
 
         if(data.source === "mobile_app"){
             if(data.is_pickup_app && data.pickup_takeaway){
                 data.type = "APP_OUT"
+                data.takeOut = 1
             }
             if(data.is_pickup_app && !data.pickup_takeaway){
                 data.type = "APP_IN"
+                data.takeOut = 0
             }
 
         }
