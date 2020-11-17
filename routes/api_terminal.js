@@ -135,5 +135,11 @@ module.exports = async function (fastify, opts) {
     const item = await db.saveItem(request.body)
     return new ItemDTO(item)
   })
+  fastify.get('/api/terminal/smena/get', async (request, reply) => {
+    return await db.getLastSmena()
+  })
+  fastify.post('/api/terminal/smena/save', async (request, reply) => {
+    return await db.saveSmena(request.body)
+  })
 }
 

@@ -72,6 +72,10 @@ module.exports = async function (fastify, opts) {
   //   {name: "Суп", items: [2], station: 1, code: "СВ-92232"},
   //   {name: "Бутерброд", items: [1, 2], station: 1, code: "СВ-92231"},
   //   {name: "Омлет", items: [1, 2, 3, 4, 5, 6, 7, 8], station: 2},
+  //   ]
+  // const ss = [
+  //   {plan: 1500000, amount: 0, count: 0, manager: 1},
+  //   {plan: 1600000, amount: 0, count: 0, manager: 2},
   // ]
   //
   //
@@ -79,7 +83,8 @@ module.exports = async function (fastify, opts) {
   // await ItemModel.bulkCreate(its)
   // await ProductGroupModel.bulkCreate(gs)
   // await ProductModel.bulkCreate(ps)
-  //
+  // await SmenaModel.bulkCreate(ss)
+
 
 
   const Order = require("./services/OrderService")

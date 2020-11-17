@@ -1,9 +1,10 @@
 class DB {
-    constructor({UserModel, ProductModel, ItemModel, ProductGroupModel, io}) {
+    constructor({UserModel, ProductModel, ItemModel, ProductGroupModel, SmenaModel, io}) {
         this.UserModel = UserModel
         this.ProductModel = ProductModel
         this.ProductGroupModel = ProductGroupModel
         this.ItemModel = ItemModel
+        this.SmenaModel = SmenaModel
         this.io = io
     }
 
@@ -90,6 +91,26 @@ class DB {
             user.role = data.role
             return await user.save()
         }
+    }
+
+    async saveSmena(data){
+        const newSmena = {
+            plan: Number(data.plan),
+            amount: 0,
+            count: 0,
+            manager: Number(data.manager)
+        }
+        await this.SmenaModel.create(newSmena)
+        return true
+    }
+
+    async getLastSmena(){
+        const smena = await this.SmenaModel.findOne({
+            order: [
+                ["id", "DESC"],
+            ]
+        })
+        return smena
     }
 
     async auth(data){
