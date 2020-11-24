@@ -4,7 +4,7 @@ const path = require('path')
 const AutoLoad = require('fastify-autoload')
 const Sequelize = require("sequelize")
 const fetch = require("node-fetch")
-
+const cron = require("node-cron")
 
 module.exports = async function (fastify, opts) {
   // Place here your custom code!
@@ -22,6 +22,7 @@ module.exports = async function (fastify, opts) {
   const Product = require("./models/sequelize/Product")
   const Item = require("./models/sequelize/Item")
   const ProductGroup = require("./models/sequelize/ProductGroup")
+  const Stat = require("./models/sequelize/Statistic")
   global.Orders = []
   global.Items = []
   global.K = 1
@@ -33,12 +34,13 @@ module.exports = async function (fastify, opts) {
   const ProductModel = sequelize.define("products", Product)
   const ItemModel = sequelize.define("items", Item)
   const ProductGroupModel = sequelize.define("product_groups", ProductGroup)
+  const StatModel = sequelize.define("statistics", Stat)
 
   ProductModel.belongsTo(ProductGroupModel, {
     foreignKey: "group_id",
     as: "group"
   })
-
+  //
   // await sequelize.sync({force: true})
   // const us = [
   //   {name: "Ефремов Алексей", login: "admin@admin.ru", password: "admin", role: "ADMIN"},
@@ -111,6 +113,7 @@ module.exports = async function (fastify, opts) {
     ProductModel,
     ProductGroupModel,
     SmenaModel,
+    StatModel,
     io: fastify.io
   })
 
@@ -120,6 +123,7 @@ module.exports = async function (fastify, opts) {
     ProductModel,
     ProductGroupModel,
     SmenaModel,
+    StatModel,
     io: fastify.io
   })
 
@@ -131,6 +135,7 @@ module.exports = async function (fastify, opts) {
     ProductModel,
     ProductGroupModel,
     SmenaModel,
+    StatModel,
     io: fastify.io
   })
 
@@ -149,6 +154,16 @@ module.exports = async function (fastify, opts) {
   setInterval(()=> {
     opts.schedule.checkNeedItems()
   }, 5000)
+
+
+  cron.schedule("*/30 * * * *", () => {
+    opts.schedule.checkItemsK()
+      .then(log => console.log(log))
+      .catch((e) => {
+        console.log("Failed to set K")
+        console.log(e)
+      })
+  })
 
 
   //////////////////

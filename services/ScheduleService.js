@@ -1,10 +1,14 @@
 
 class ScheduleService {
-    constructor({UserModel, ProductModel, ItemModel, io}) {
+    constructor({UserModel, ProductModel, ItemModel, ProductGroupModel, SmenaModel, StatModel, io}) {
         this.UserModel = UserModel
         this.ProductModel = ProductModel
         this.ItemModel = ItemModel
         this.io = io
+    }
+
+    async checkItemsK() {
+
     }
 
     async checkItemsDie(){

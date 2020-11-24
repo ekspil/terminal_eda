@@ -99,7 +99,7 @@ class Order {
                 if(!position.code) continue
                 const product = await this.ProductModel.findOne({
                     where: {
-                        code: position.code
+                        code: String(position.code)
                     }
                 })
 
