@@ -47,6 +47,9 @@ class DB {
                     id: data.id
                 }
             })
+            if(data.action === "DELETE"){
+                return await product.destroy()
+            }
             product.name = data.name
             product.station = data.station
             product.items = data.items
@@ -66,6 +69,10 @@ class DB {
                     id: data.id
                 }
             })
+            if(data.action === "DELETE"){
+                return await item.destroy()
+            }
+
             item.name = data.name
             item.station = data.station
             item.minCount = data.minCount
@@ -85,6 +92,10 @@ class DB {
                     id: data.id
                 }
             })
+
+            if(data.action === "DELETE"){
+                return await user.destroy()
+            }
             user.name = data.name
             user.password = data.password
             user.login = data.login
