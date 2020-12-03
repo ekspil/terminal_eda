@@ -70,6 +70,7 @@ class DB {
                 }
             })
             if(data.action === "DELETE"){
+                global.Items = global.Items.filter(item => item.id !== data.id)
                 return await item.destroy()
             }
 

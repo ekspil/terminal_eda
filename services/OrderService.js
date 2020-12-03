@@ -32,6 +32,9 @@ class Order {
             if(data.action === "READY"){
                 data.timeReady = new Date().getTime()
             }
+            if(!data.hidden){
+                data.hidden = []
+            }
 
             const order = global.Orders.find(order => order.id === data.id);
             if (!order) {
