@@ -61,6 +61,7 @@ class DB {
     async saveItem(data){
         if(!data.id){
             const item = await this.ItemModel.create(data)
+            global.Items.push(items)
             return item
         }
         else {
@@ -78,6 +79,15 @@ class DB {
             item.station = data.station
             item.minCount = data.minCount
             item.liveTime = data.liveTime
+            global.Items = global.Items.map(it => {
+                if (it.id !== data.id) return it
+                it.name = data.name
+                it.station = data.station
+                it.minCount = data.minCount
+                it.liveTime = data.liveTime
+
+                return it
+            })
             return await item.save()
         }
     }
