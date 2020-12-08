@@ -22,6 +22,12 @@ class Order {
         if (data.action === "DELETE") {
             global.Orders = global.Orders.filter(order => order.id !== data.id);
         } else {
+            data.positions = data.positions.map(p => {
+                if(!p.code) return p
+                const pos = global.Products.find(item => item.code === p.code)
+                if(pos) return pos
+                return p
+            })
 
 
 

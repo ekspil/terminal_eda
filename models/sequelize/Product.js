@@ -14,6 +14,9 @@ const Product = {
     code: {
         type: Sequelize.DataTypes.STRING,
     },
+    corner: {
+        type: Sequelize.DataTypes.STRING,
+    },
     items: {
         type: Sequelize.DataTypes.ARRAY(Sequelize.DataTypes.INTEGER)
     },

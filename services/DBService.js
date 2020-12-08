@@ -54,6 +54,7 @@ class DB {
             product.station = data.station
             product.items = data.items
             product.code = data.code
+            product.corner = data.corner
             return await product.save()
         }
     }

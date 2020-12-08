@@ -24,6 +24,7 @@ module.exports = async function (fastify, opts) {
   const ProductGroup = require("./models/sequelize/ProductGroup")
   const Stat = require("./models/sequelize/Statistic")
   global.Orders = []
+  global.Products = []
   global.Items = []
   global.K = 1
 
@@ -146,6 +147,7 @@ module.exports = async function (fastify, opts) {
 
 
   // Start functions
+  await opts.schedule.updateProducts()
 
   await opts.order.startItems()
   setInterval(()=> {
@@ -154,6 +156,9 @@ module.exports = async function (fastify, opts) {
   setInterval(()=> {
     opts.schedule.checkNeedItems()
   }, 5000)
+  setInterval(()=> {
+    opts.schedule.updateProducts()
+  }, 300000)
 
 
   cron.schedule("*/30 * * * *", () => {

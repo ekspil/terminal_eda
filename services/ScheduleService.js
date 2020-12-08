@@ -1,4 +1,4 @@
-
+const Product = require("../models/dto/product")
 class ScheduleService {
     constructor({UserModel, ProductModel, ItemModel, ProductGroupModel, SmenaModel, StatModel, io}) {
         this.UserModel = UserModel
@@ -32,6 +32,10 @@ class ScheduleService {
           return it
       })
         this.io.emit('fullItems', global.Items)
+    }
+    async updateProducts(){
+        const ps = await this.ProductModel.findAll()
+        global.Products = ps.map(p => new Product(p))
     }
 
     async checkNeedItems(){
