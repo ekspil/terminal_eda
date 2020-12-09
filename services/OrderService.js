@@ -188,7 +188,7 @@ class Order {
                         id: i[3],
                         name: i[0],
                         price: i[4] || (item.price / i.length),
-                        count: Number(i[1]),
+                        count: (Number(i[1]) * item.quantity),
                         code: i[3],
                         station: Number(i[2]),
                         mods: []
