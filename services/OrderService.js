@@ -25,7 +25,10 @@ class Order {
             data.positions = data.positions.map(p => {
                 if(!p.code) return p
                 const pos = global.Products.find(item => item.code === p.code)
-                if(pos) return pos
+                if(pos) {
+                    p.name = pos.name
+                    p.corner = pos.corner
+                }
                 return p
             })
 
