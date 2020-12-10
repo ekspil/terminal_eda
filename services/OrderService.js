@@ -10,7 +10,17 @@ class Order {
         this.superdostavka = this.superdostavka.bind(this)
     }
 
+    async changeHidden(data){
+        const {orderId, station} = data
+        global.Orders = global.Orders.map(order =>{
+            if(order.id !== orderId) return order
+            order.hidden.push(station)
+            return order
 
+        })
+        return global.Orders
+
+    }
     async change(data, flag){
         if(flag === "superdostavka"){
             data = this.superdostavka(data, {action: "PAYED"})
