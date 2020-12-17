@@ -237,6 +237,17 @@ class Order {
             }
 
         }
+        if(data.source === "site"){
+            if(data.is_pickup && data.pickup_takeaway){
+                data.type = "APP_OUT"
+                data.takeOut = 1
+            }
+            if(data.is_pickup && !data.pickup_takeaway){
+                data.type = "APP_IN"
+                data.takeOut = 0
+            }
+
+        }
 
 
         return order
