@@ -11,9 +11,12 @@ class Order {
     }
 
     async changeHidden(data){
-        const {orderId, station} = data
+        const {orderId, station, corner, status} = data
         global.Orders = global.Orders.map(order =>{
             if(order.id !== orderId) return order
+            if(corner && status){
+                order.cornerReady.push({corner, status})
+            }
             order.hidden.push(station)
             return order
 
@@ -53,6 +56,9 @@ class Order {
             }
             if(!data.hidden){
                 data.hidden = []
+            }
+            if(!data.cornerReady){
+                data.cornerReady = []
             }
 
             const order = global.Orders.find(order => order.id === data.id);
@@ -228,23 +234,23 @@ class Order {
 
         if(data.source === "mobile_app"){
             if(data.is_pickup_app && data.pickup_takeaway){
-                data.type = "APP_OUT"
-                data.takeOut = 1
+                order.type = "APP_OUT"
+                order.takeOut = 1
             }
             if(data.is_pickup_app && !data.pickup_takeaway){
-                data.type = "APP_IN"
-                data.takeOut = 0
+                order.type = "APP_IN"
+                order.takeOut = 0
             }
 
         }
         if(data.source === "site"){
             if(data.is_pickup && data.pickup_takeaway){
-                data.type = "APP_OUT"
-                data.takeOut = 1
+                order.type = "APP_OUT"
+                order.takeOut = 1
             }
             if(data.is_pickup && !data.pickup_takeaway){
-                data.type = "APP_IN"
-                data.takeOut = 0
+                order.type = "APP_IN"
+                order.takeOut = 0
             }
 
         }
