@@ -59,6 +59,33 @@ module.exports = async function (fastify, opts) {
 
   })
 
+  fastify.post('/api/terminal/order/sendStatus', async (request, reply)=>{
+
+    //accepted, production, cooked, sent, done, canceled(отменен)
+    let {orderId, status} = request.body
+    if(orderId.includes("-")){
+      orderId = (orderId.split("-"))[1]
+    }
+
+
+
+
+    const result = await fetch(`https://terminaleda.ru/common_api/order/${orderId}?apikey=${process.env.API_KEY}`, {
+      method: "GET"
+    })
+    const json = await result.json()
+
+    if(json.status === 'done' || json.status === 'canceled' ){
+      return {ok: false}
+    }
+
+    await fetch(`https://terminaleda.ru/common_api/set_order_status/${orderId}/${status}?apikey=${process.env.API_KEY}`, {
+      method: "GET"
+    })
+
+    return {ok: true}
+  })
+
   fastify.post('/api/terminal/order/setReadyItem', async (request, reply)=>{
 
     try {
