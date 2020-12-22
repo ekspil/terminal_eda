@@ -54,6 +54,7 @@ module.exports = async function (fastify, opts) {
   })
   fastify.post('/api/terminal/order/changeHidden', async (request, reply)=>{
     const data = await  order.changeHidden(request.body)
+    await fastify.io.emit("fullCheck", global.Orders)
     return {ok: true}
 
 
