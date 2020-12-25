@@ -254,6 +254,17 @@ class Order {
             }
 
         }
+        if(data.source === "phone"){
+            if(data.is_pickup && data.pickup_takeaway){
+                order.type = "APP_OUT"
+                order.takeOut = 1
+            }
+            if(data.is_pickup && !data.pickup_takeaway){
+                order.type = "APP_IN"
+                order.takeOut = 0
+            }
+
+        }
 
 
         return order
