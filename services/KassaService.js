@@ -60,7 +60,6 @@ class Order {
             })
             const itemsDTO = data.items.map(item => {
                 item.order_id = order.id
-                item.code = item.id
                 delete item.id
                 return item
             })
