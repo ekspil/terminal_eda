@@ -23,7 +23,10 @@ module.exports = async function (fastify, opts) {
   const Item = require("./models/sequelize/Item")
   const ProductGroup = require("./models/sequelize/ProductGroup")
   const Stat = require("./models/sequelize/Statistic")
+  const Orders = require("./models/sequelize/Orders")
+  const OrderItems = require("./models/sequelize/OrderItems")
   global.Orders = []
+  global.KassaOrders = []
   global.Products = []
   global.Items = []
   global.K = 1
@@ -36,12 +39,19 @@ module.exports = async function (fastify, opts) {
   const ItemModel = sequelize.define("items", Item)
   const ProductGroupModel = sequelize.define("product_groups", ProductGroup)
   const StatModel = sequelize.define("statistics", Stat)
+  const OrderModel = sequelize.define("orders", Orders)
+  const OrderItemsModel = sequelize.define("order_items", OrderItems)
 
   ProductModel.belongsTo(ProductGroupModel, {
     foreignKey: "group_id",
     as: "group"
   })
+  OrderModel.hasMany(OrderItemsModel, {
+    foreignKey: "order_id",
+    as: "items"
+  })
   //
+   await sequelize.sync({alter: true})
   // await sequelize.sync({force: true})
   // const us = [
   //   {name: "Ефремов Алексей", login: "admin@admin.ru", password: "admin", role: "ADMIN"},
@@ -87,10 +97,11 @@ module.exports = async function (fastify, opts) {
   // await ProductGroupModel.bulkCreate(gs)
   // await ProductModel.bulkCreate(ps)
   // await SmenaModel.bulkCreate(ss)
-  //
+
 
 
   const Order = require("./services/OrderService")
+  const Kassa = require("./services/KassaService")
   const DB = require("./services/DBService")
   const Schedule = require("./services/ScheduleService")
 
@@ -115,6 +126,18 @@ module.exports = async function (fastify, opts) {
     ProductGroupModel,
     SmenaModel,
     StatModel,
+    io: fastify.io
+  })
+
+  opts.kassa = new Kassa({
+    UserModel,
+    ItemModel,
+    ProductModel,
+    ProductGroupModel,
+    SmenaModel,
+    StatModel,
+    OrderModel,
+    OrderItemsModel,
     io: fastify.io
   })
 
