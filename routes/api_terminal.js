@@ -175,5 +175,8 @@ module.exports = async function (fastify, opts) {
   fastify.post('/api/terminal/smena/save', async (request, reply) => {
     return await db.saveSmena(request.body)
   })
+  fastify.post('/api/terminal/groups/save', async (request, reply) => {
+    return await db.saveGroup(request.body)
+  })
 }
 

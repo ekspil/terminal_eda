@@ -27,6 +27,7 @@ class Order {
                 ["id", "DESC"]
             ]
         })
+        if(!order) throw new Error("Order not found")
         const items = await order.getItems()
         order.items = items || []
         return {

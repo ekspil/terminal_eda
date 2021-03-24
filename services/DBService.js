@@ -55,7 +55,26 @@ class DB {
             product.items = data.items
             product.code = data.code
             product.corner = data.corner
+            product.group_id = data.group_id
             return await product.save()
+        }
+    }
+    async saveGroup(data){
+        if(!data.id){
+            const group = await this.ProductGroupModel.create(data)
+            return group
+        }
+        else {
+            const group = await this.ProductGroupModel.findOne({
+                where: {
+                    id: data.id
+                }
+            })
+            if(data.action === "DELETE"){
+                return await group.destroy()
+            }
+            group.name = data.name
+            return await group.save()
         }
     }
 

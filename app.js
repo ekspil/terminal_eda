@@ -46,6 +46,10 @@ module.exports = async function (fastify, opts) {
     foreignKey: "group_id",
     as: "group"
   })
+  ProductGroupModel.hasMany(ProductModel, {
+    foreignKey: "group_id",
+    as: "products"
+  })
   OrderModel.hasMany(OrderItemsModel, {
     foreignKey: "order_id",
     as: "items"
