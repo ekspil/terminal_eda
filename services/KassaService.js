@@ -1,4 +1,5 @@
 const ItemDTO = require("../models/dto/item")
+const fetch = require("node-fetch")
 
 class Order {
     constructor({UserModel, ProductModel, ItemModel, OrderModel, OrderItemsModel, io}) {

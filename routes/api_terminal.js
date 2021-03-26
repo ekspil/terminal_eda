@@ -79,12 +79,22 @@ module.exports = async function (fastify, opts) {
     if(json.status === 'done' || json.status === 'canceled' ){
       return {ok: false}
     }
+    try {
 
-    await fetch(`https://terminaleda.ru/common_api/set_order_status/${orderId}/${status}?apikey=${process.env.API_KEY}`, {
-      method: "GET"
-    })
+      const result = await fetch(`https://terminaleda.ru/common_api/set_order_status/${orderId}/${status}?apikey=${process.env.API_KEY}`, {
+        method: "GET"
+      })
+      console.log("LOG:")
+      console.log(result)
 
-    return {ok: true}
+
+      return {ok: true}
+    }
+    catch (e) {
+      console.log("ERROR:")
+      console.log(e)
+      return {ok: false, error: e}
+    }
   })
 
   fastify.post('/api/terminal/order/setReadyItem', async (request, reply)=>{
