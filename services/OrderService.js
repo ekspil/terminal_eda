@@ -7,24 +7,50 @@ class Order {
         this.ItemModel = ItemModel
         this.io = io
         this.checkItems = this.checkItems.bind(this)
+        this.change = this.change.bind(this)
         this.superdostavka = this.superdostavka.bind(this)
+        this.checkDone = this.checkDone.bind(this)
     }
 
     async changeHidden(data){
         const {orderId, station, corner, status} = data
-        global.Orders = global.Orders.map(order =>{
+        global.Orders = global.Orders.map(async order =>{
             if(order.id !== orderId) return order
             if(corner && status){
-                order.cornerReady.push({corner, status})
+                order.cornerReady = order.cornerReady.map(st => {
+                    if(st.corner !== corner) return st
+                    st.status = status
+                    return st
+                })
             }
             order.hidden.push(station)
             return order
 
         })
+
+        await this.checkDone(orderId)
         return global.Orders
 
     }
+
+    async checkDone(orderId){
+        const order = global.Orders.find(order => order.id === orderId)
+        if(!order) throw new Error("No such order")
+
+        for (let i of order.cornerReady){
+            if (i.status === "DONE") continue
+            return false
+        }
+        global.Orders = global.Orders.filter(order => order.id !== orderId)
+
+        return true
+
+    }
+
     async change(data, flag){
+        if(!data.cornerReady){
+            data.cornerReady = []
+        }
         if(flag === "superdostavka"){
             data = this.superdostavka(data, {action: "PAYED"})
         }
@@ -41,6 +67,9 @@ class Order {
                 if(pos) {
                     p.name = pos.name
                     p.corner = pos.corner
+                    const c = data.cornerReady.find(i => i.corner === pos.corner)
+                    if(!c) data.cornerReady.push({ corner: pos.corner, status: "NOTREADY" })
+
                 }
                 return p
             })
@@ -57,9 +86,6 @@ class Order {
             if(!data.hidden){
                 data.hidden = []
             }
-            if(!data.cornerReady){
-                data.cornerReady = []
-            }
 
             const order = global.Orders.find(order => order.id === data.id);
             if (!order) {
@@ -71,7 +97,6 @@ class Order {
                 return order;
             });
         }
-
         return Orders
     }
     async startItems(){

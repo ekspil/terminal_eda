@@ -53,7 +53,7 @@ module.exports = async function (fastify, opts) {
 
   })
   fastify.post('/api/terminal/order/changeHidden', async (request, reply)=>{
-    const data = await  order.changeHidden(request.body)
+    await  order.changeHidden(request.body)
     await fastify.io.emit("fullCheck", global.Orders)
     return {ok: true}
 
@@ -79,6 +79,11 @@ module.exports = async function (fastify, opts) {
     if(json.status === 'done' || json.status === 'canceled' ){
       return {ok: false}
     }
+
+    if(status.toLowerCase() === "done") {
+      const checkDone = order.checkDone(orderId)
+      if(!checkDone) return {ok: false}
+    }
     try {
 
       const result = await fetch(`https://terminaleda.ru/common_api/set_order_status/${orderId}/${status}?apikey=${process.env.API_KEY}`, {
@@ -88,7 +93,7 @@ module.exports = async function (fastify, opts) {
       console.log(result)
 
 
-      return {ok: true}
+      return {ok: true, info: result}
     }
     catch (e) {
       console.log("ERROR:")
