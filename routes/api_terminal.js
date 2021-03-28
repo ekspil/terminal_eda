@@ -77,9 +77,9 @@ module.exports = async function (fastify, opts) {
     })
     const json = await result.json()
 
-    // if(json.status === 'done' || json.status === 'canceled' ){
-    //   return {ok: false}
-    // }
+    if(json.status === 'done' || json.status === 'canceled' ){
+      return {ok: false}
+    }
 
     if(status.toLowerCase() === "done" && corner) {
       const checkDone = order.checkDone(orderId, corner)
