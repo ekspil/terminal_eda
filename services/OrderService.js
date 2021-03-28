@@ -12,9 +12,9 @@ class Order {
         this.checkDone = this.checkDone.bind(this)
     }
 
-    async changeHidden(data){
+    changeHidden(data){
         const {orderId, station, corner, status} = data
-        global.Orders = global.Orders.map(async order =>{
+        global.Orders = global.Orders.map(order =>{
             if(order.id !== orderId) return order
             if(corner && status){
                 order.cornerReady = order.cornerReady.map(st => {
@@ -28,18 +28,19 @@ class Order {
 
         })
 
-        await this.checkDone(orderId)
+        this.checkDone(orderId)
         return global.Orders
 
     }
 
-    async checkDone(orderId){
+    checkDone(orderId, corner){
         const order = global.Orders.find(order => order.id === orderId)
         if(!order) throw new Error("No such order")
 
         for (let i of order.cornerReady){
-            if (i.status === "DONE") continue
-            return false
+            if(corner === i.corner) i.status = "DONE"
+            if (i.status !== "DONE") return false
+
         }
         global.Orders = global.Orders.filter(order => order.id !== orderId)
 
@@ -48,14 +49,16 @@ class Order {
     }
 
     async change(data, flag){
-        if(!data.cornerReady){
-            data.cornerReady = []
-        }
+
         if(flag === "superdostavka"){
             data = this.superdostavka(data, {action: "PAYED"})
         }
         if(flag === "superdostavka_upd"){
             data = this.superdostavka(data, {action: "UPDATE"})
+        }
+
+        if(!data.cornerReady){
+            data.cornerReady = []
         }
 
         if (data.action === "DELETE") {

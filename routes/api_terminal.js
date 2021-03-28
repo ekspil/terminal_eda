@@ -53,7 +53,7 @@ module.exports = async function (fastify, opts) {
 
   })
   fastify.post('/api/terminal/order/changeHidden', async (request, reply)=>{
-    await  order.changeHidden(request.body)
+    order.changeHidden(request.body)
     await fastify.io.emit("fullCheck", global.Orders)
     return {ok: true}
 
@@ -63,41 +63,42 @@ module.exports = async function (fastify, opts) {
   fastify.post('/api/terminal/order/sendStatus', async (request, reply)=>{
 
     //accepted, production, cooked, sent, done, canceled(отменен)
-    let {orderId, status} = request.body
+    let {orderId, status, corner} = request.body
+    let Id = orderId
     if(orderId.includes("-")){
-      orderId = (orderId.split("-"))[1]
+      Id = (orderId.split("-"))[1]
     }
 
 
 
 
-    const result = await fetch(`https://terminaleda.ru/common_api/order/${orderId}?apikey=${process.env.API_KEY}`, {
+    const result = await fetch(`https://terminaleda.ru/common_api/order/${Id}?apikey=${process.env.API_KEY}`, {
       method: "GET"
     })
     const json = await result.json()
 
-    if(json.status === 'done' || json.status === 'canceled' ){
-      return {ok: false}
-    }
+    // if(json.status === 'done' || json.status === 'canceled' ){
+    //   return {ok: false}
+    // }
 
-    if(status.toLowerCase() === "done") {
-      const checkDone = order.checkDone(orderId)
-      if(!checkDone) return {ok: false}
+    if(status.toLowerCase() === "done" && corner) {
+      const checkDone = order.checkDone(orderId, corner)
+      if(!checkDone) {
+        await fastify.io.emit("fullCheck", global.Orders)
+        return {ok: false}
+      }
     }
     try {
 
       const result = await fetch(`https://terminaleda.ru/common_api/set_order_status/${orderId}/${status}?apikey=${process.env.API_KEY}`, {
         method: "GET"
       })
-      console.log("LOG:")
-      console.log(result)
 
-
+      await fastify.io.emit("fullCheck", global.Orders)
       return {ok: true, info: result}
     }
     catch (e) {
-      console.log("ERROR:")
-      console.log(e)
+      await fastify.io.emit("fullCheck", global.Orders)
       return {ok: false, error: e}
     }
   })
