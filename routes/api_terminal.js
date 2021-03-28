@@ -90,12 +90,11 @@ module.exports = async function (fastify, opts) {
     }
     try {
 
-      const result = await fetch(`https://terminaleda.ru/common_api/set_order_status/${orderId}/${status}?apikey=${process.env.API_KEY}`, {
+      const result = await fetch(`https://terminaleda.ru/common_api/set_order_status/${Id}/${status}?apikey=${process.env.API_KEY}`, {
         method: "GET"
       })
-      const json2 = await result.json()
       await fastify.io.emit("fullCheck", global.Orders)
-      return {ok: true, info: json2}
+      return {ok: true, info: "Все хорошо"}
     }
     catch (e) {
       await fastify.io.emit("fullCheck", global.Orders)
