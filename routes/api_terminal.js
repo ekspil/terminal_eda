@@ -70,7 +70,7 @@ module.exports = async function (fastify, opts) {
     }
 
 
-
+    try {
 
     const result = await fetch(`https://terminaleda.ru/common_api/order/${Id}?apikey=${process.env.API_KEY}`, {
       method: "GET"
@@ -88,9 +88,9 @@ module.exports = async function (fastify, opts) {
         return {ok: true, comment: "Статус не отправлен, еще есть не завершенные корнеры"}
       }
     }
-    try {
 
-      const result = await fetch(`https://terminaleda.ru/common_api/set_order_status/${Id}/${status}?apikey=${process.env.API_KEY}`, {
+
+      await fetch(`https://terminaleda.ru/common_api/set_order_status/${Id}/${status}?apikey=${process.env.API_KEY}`, {
         method: "GET"
       })
       await fastify.io.emit("fullCheck", global.Orders)
