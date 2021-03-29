@@ -78,14 +78,14 @@ module.exports = async function (fastify, opts) {
     const json = await result.json()
 
     if(json.status === 'done' || json.status === 'canceled' ){
-      return {ok: false}
+      return {ok: true, comment: "Статус не отправлен, заказ уже завершен или отменен"}
     }
 
     if(status.toLowerCase() === "done" && corner) {
       const checkDone = order.checkDone(orderId, corner)
       if(!checkDone) {
         await fastify.io.emit("fullCheck", global.Orders)
-        return {ok: false}
+        return {ok: true, comment: "Статус не отправлен, еще есть не завершенные корнеры"}
       }
     }
     try {
@@ -94,7 +94,7 @@ module.exports = async function (fastify, opts) {
         method: "GET"
       })
       await fastify.io.emit("fullCheck", global.Orders)
-      return {ok: true, info: "Все хорошо"}
+      return {ok: true, comment: "Статус отправлен: " + status}
     }
     catch (e) {
       await fastify.io.emit("fullCheck", global.Orders)
