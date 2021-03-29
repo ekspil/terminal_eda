@@ -31,7 +31,7 @@ module.exports = async function (fastify, opts) {
   })
 
   fastify.post('/api/kassa/updateOrder/:orderId', async (request, reply) => {
-    await kassa.update(request.body, request.params.orderId)
+    await kassa.update(request.body, request.params.orderId, request.query.printer)
     await fastify.io.emit("fullCheck", global.Orders)
 
     return {ok: true}
