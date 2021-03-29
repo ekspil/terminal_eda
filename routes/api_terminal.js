@@ -98,7 +98,7 @@ module.exports = async function (fastify, opts) {
     }
     catch (e) {
       await fastify.io.emit("fullCheck", global.Orders)
-      return {ok: false, error: e}
+      return {ok: false, comment: "Походу нет связи с супердоставкой...", error: e}
     }
   })
 
