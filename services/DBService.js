@@ -54,6 +54,7 @@ class DB {
             product.station = data.station
             product.items = data.items
             product.code = data.code
+            product.price = data.price
             product.corner = data.corner
             product.group_id = data.group_id
             return await product.save()

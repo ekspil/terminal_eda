@@ -115,6 +115,18 @@ module.exports = async function (fastify, opts) {
 
   })
 
+  fastify.post('/api/terminal/order/setOrderScreen', async (request, reply)=>{
+
+    try {
+      const data = await  order.setOrderScreen(request.body)
+      return {ok: true}
+    }catch(e){
+      return{ok: false}
+    }
+
+
+  })
+
   fastify.post('/api/terminal/order/setDieItem', async (request, reply)=>{
 
     try {

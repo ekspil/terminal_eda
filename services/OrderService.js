@@ -149,6 +149,14 @@ class Order {
       })
         return  global.Items
     }
+    async setOrderScreen(item){
+        global.Orders = global.Orders.map(it => {
+          if(it.id !== item.id) return it
+          it.screen = item.screen
+          return it
+      })
+        return  global.Orders
+    }
     async checkItems(data){
         if(data && data.positions){
             for(let position of data.positions){

@@ -17,6 +17,9 @@ const Product = {
     corner: {
         type: Sequelize.DataTypes.STRING,
     },
+    price: {
+        type: Sequelize.DataTypes.FLOAT,
+    },
     items: {
         type: Sequelize.DataTypes.ARRAY(Sequelize.DataTypes.INTEGER)
     },
