@@ -36,5 +36,19 @@ module.exports = async function (fastify, opts) {
 
     return {ok: true}
   })
+
+  fastify.post('/api/kassa/printFiscal/', async (request, reply) => {
+
+    const res = await kassa.printFiscal(request.body)
+    const result = await res.json()
+    return {ok: true, result}
+  })
+
+  fastify.post('/api/kassa/payTerminal/', async (request, reply) => {
+
+    const res = await kassa.payTerminal(request.body)
+    const result = await res.json()
+    return {ok: true, result}
+  })
 }
 

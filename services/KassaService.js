@@ -15,8 +15,10 @@ class Order {
         this.ExecuteCommand = this.ExecuteCommand.bind(this)
     }
 
-    async ExecuteCommand(Data){
-        return await fetch(`http://${process.env.KKM_SERVER}/Execute`, {
+    async ExecuteCommand(Data, otherServer){
+        let server = process.env.KKM_SERVER
+        if(otherServer) server = otherServer
+        return await fetch(`http://${server}/Execute`, {
             method: 'post',
             body: JSON.stringify(Data) ,
             headers: {
@@ -72,7 +74,7 @@ class Order {
                 {
                     PrintImage: {
                         //Картинка в Base64. Картинка будет преобразована в 2-х цветное изображение- поэтому лучше посылать 2-х цветный bmp
-                        Image: "Qk3+EwAAAAAAAD4AAAAoAAAA5AAAAJ4AAAABAAEAAAAAAMATAACHHQAAhx0AAAAAAAAAAAAAAAAAAP///wD/////////////////////////////////////8AAAAP/////////////////////////////////////wAAAA//////////////////////////////////////AAAAD/////////////////////////////////////8AAAAP/////////////////////////////////////wAAAA//////////////////////////////////////AAAAD/////////////////////////////////////8AAAAP////+f//////////+P///////////////////wAAAA/////5///////////4////////////////////AAAAD/////n///////////H///////////////////8AAAAP////+f//////////8f///////////////////wAAAA/////5///////////x////////////////////AAAAD/////j//////////+P///////////////////8AAAAP////+PwAj///////w////////////////////wAAAA/////48PgP///////H////////////////////AAAAD/////zH/B///////4f///////////////////8AAAAP/////J/8H///////j////////////////////wAAAA/////+P/4///////8P////////////////////AAAAD///gAx//z///////h////////////////////8AAAAP//4fgP//P//////+P////////////////////wAAAA///H/z//8B//////x///////gP////////////AAAAD//5/8f//gD/////+P//////4AH///////////8AAAAP//P/3//8/B/////x///////AAMf///////+A/wAAAA//8/////H+H////+H//////4/+AH///////AB/AAAAD//n////5/w/8f//yP//////n/w4P//////4fP8AAAAP/+////+f+D/8AH/8f/////8/+f+P/////+H8/wAAAA//7////z//P//g//x//////3/3/+f/////j/5/AAAAD//P///+//8//////H/////8f///8////wB//n8AAAAP/8////z//j/////8/////wB////5//+AH//8PwAAAA//z///+v/+f/P///D////wAH////z/8A////0fAAAAD//P///7//w/+AA/4f///8Aef////n+A////+R8AAAAP/9//////4ID+Tv/7////A/5//8//vA/////znwAAAA//3/P////H4f7Of/v///4//n//n//Q/////8efAAAAD//f+P///x/B/Mc/+f///H//P/+f/+P/////Dz8AAAAP/9/8f//+P4P9x7/5///5//8//wA/z////4A/PwAAAA//3/Mf//z/+/nD3/n///P//z//GAAf////P/8PAAAAD/+f/A//+f/7+evP/f//8///H/8f/x////9//g8AAAAP/5//A//y//Pz6ef8///n//+f/x//P////3/+HwAAAA//n/+Q//7/8/Ps8/z//+///5//n/9///////yfAAAAD/+YABx////n4+z7/v//z///z/+P/n//////8Z8AAAAP/4B/gh///8/n5n3+//+f///P/8/+f/////8DvwAAAA/+D//xh///n+fnfP5//7///+f/z/5///9/+A+/AAAAD/h///jh//4/x+c+f3//P///4//n/n///v/z/z8AAAAP8P///Hg/+H/P578/f/AD///z//f+f//+//f/fwAAAA/D///+fAAB/8/nn58/wfD/wAH/8/9///n/9/7/AAAAD4f///5+AA//z/ffz7+P/n/4AP/5////8////P8AAAAPn////z5///+f9+/nnz//P/j8f/z////H///x/wAAAA8/////Pz///5/z5/uef/++Af4/vD///4///8f/AAAADn////8/P///n/P3/N7/B58//x/eD//8P//8D/8AAAAOf////D8f//+f8/v+QP553n//h88D/4D///B//wAAAAz////+P5///x/7+f8E/P3c///j54D/////h///AAAADf////8fj///P/v9/x35/dz///Dz4h////8P//8AAAAN/////5/P//8/+fj/PfL8Gf///BH57////H///wAAAA3/////z8f//z/58n5993wT////AH/v///4////AAAACf///z/Px///P/nmfn3nPMP////AP+f//+P///8AAAAN///gB+/n//8/+f8+f+e99/////8P5///z////wAAAA3//wAD7+P//3/9/w5/57z3/////4PH//8/////AAAADd/8H+Hv8///f/z/Hn/APAf/////8AP//n////8AAAAMv/D/z8/x//9//PxPf8/8T///////8//+/////wAAAA6/4//P3/n//3/8/+c/z/0f///////5//7/////AAAADj+P/8+f+P/+f/7/9z/P/D////////x//3////8AAAAPfx//zz/8//4//n/zn8/8P////////h//n////wAAAA9+X//Of/5//4f+f4Gf3/x/////////g//P////AAAADn6f/8z//n//4f5//cff/H/////////B/8////8AAAAOf5//yf//O//8fz/879+8A/////////D/5////wAAAA5/n//j//8H//8fP/5v3zw4////////+H/n////AAAADn+f/8H//4///8c//y/fPH8////////8f/f///8AAAAOf5//AH//H///4x//r988f4///h////5/9////wAAAA9/n/58P/8wH/+Hn//P37x/5//4B////n/n////AAAAD3+f//8/8AD//B+f/+/fvD/7//vj///+f+f///8AAAAPP5///AAA///x/4//79+8P+Af8/n///9/x////wAAAA+Pn/////////v/z//vz7weAAH7/P///z+P////AAAAD8AP////////+f/H/+/Pvfg/4Dn/P///Pw////8AAAAP+I/////////9/+f9788B4//+Df+A//+IH////wAAAA//z/////////z/5/zvz3OP///A/AQ//4D/////AAAAD//P/////////v/j/k/O/x////CA/x//h/////8AAAAP/8/////////+f/P/D85+P////g//n//f/////wAAAA//5/////////8/8f8Px3z/////wf/P////////AAAAD//n/////////5/5/4/gef///////8////////8AAAAP/+f/////////n/n/L+Az////////z////////wAAAA//9//////////P/P9v4Cf//h/////P////////AAAAD//z/////////+f8/v/gD//+7////5////////8AAAAP//P/////////4/58//Af//53////z////////wAAAA//+f/////////z/33/8D///zP////H////////AAAAD//5//////////n/Pf/wP///x////+P///////8AAAAP//j//////////P+Z/3B/////////8f///////wAAAA///P/////////+fpr/uP/////////4////////AAAAD//+f/////////48yP+I//////////x///////8AAAAP//8P//////A//xzp/8H//5///////j///////wAAAA///4AAAAAAAH//iPH/8P//N//////+P///////AAAAD////AAAAAf8P/gA4f////93//////8f//////8AAAAP////4AA///4PAADh/////7v//////4///////wAAAA///////////4AAAMH/////x///////z///////AAAAD///////////+AAAwP///f/////////H//////8AAAAP////////////wADA9//7/////////+f//////wAAAA/////////////gAABn//A/////////5///////AAAAD//////////8AHAAAAf/wf///x/////j//////8AAAAP//////////8AAAAAB/8P///+b/////P//////wAAAA///////////8AAAAAH/Bf/9/73////8///////AAAAD///////////8AAAAAAAE//z/3f////z//////8AAAAP///////////8AAAAAAAJ//n/h//v//P//////wAAAA//////////8AAAAAAD4Az//P///8D/8///////AAAAD//////////AAAAAAAPADAAAf///gD/z//////8AAAAP//////////AAAAAAA/gGAAAf//+AD/P//////wAAAA///////////gAAAAAB+AYDn8///wAH9///////AAAAD///////////gAAAAAH4BwHf4///AAPn//////8AAAAP///////////gAAAAAfgHAd/w//8AAc///////wAAAA////////////gAAAAA/AcBz/w//wAAn///////AAAAD////////////AAAAAD8h5Hv/w//AAA///////8AAAAP///////////+AAAAAPzHke//wf8AAD///////wAAAA///////////+AAAAAA7A+D7//4HwAAP///////AAAAD///////////AAAAAAD0H5/n//8AAAAf//////8AAAAP//////////4AAAAAAPb/n+f///AAAB///////wAAAA//////////+AAAAAAA9v+f5////4AAD///////AAAAD//////////wAAAAAAB2/5/3////wAAP//////8AAAAP////////////AAAAAHN/j/f//7/gDg///////wAAAA/////////////4AAAA+3+P5///P/AfH///////AAAAD/////////////wAAAD9v5fn//x/+A8f//////8AAAAP////////////+OAAAP+ft+//8H/8AB///////wAAAA/////////////54AAA/884j//A//8AP///////AAAAD/////////////nuAAD/AHwD/4H//4D///////8AAAAP////////////+8/AAH9P/4v8Af///////////wAAAA/////////////7n/gAP3P/GfAD////////////AAAAD/////////////Of/AAPPP55wAf///////////8AAAAP////////////+z/8wAGffvAAD/z//////////wAAAA/////////////7P/ngAAc+wAAf4f//////////AAAAD/////////////t/8fAAADwAAD8D//////////8AAAAP////////////+H/z+AAAAAAAeAf//////////wAAAA/////////////4f+f8AAAAAADAD///////////AAAAD/////////////z/x/4AAAAAAAAf//////////8AAAAP/////////////P/P/wAAAAAAAD/+/////////wAAAA/////////////8/5/+AAAAAAAA//H/////////AAAAD/////////////3/n/wgAAAAAAH/g/////////8AAAAP/////////////f8/8PAAAAAAB/gH/////////wAAAA/////////////9/3/h+AAAAAAfgB//////////AAAAD/////////////3+f8P+AAAAAAAAP/////////8AAAAP/////////////f7/j/8AAAAAAAD//////////wAAAA/////////////9/P8f/4AAAAAAA///////////AAAAD/////////////n9/j//4AAAAAAf//////////8AAAAP////////////+fn8f//4AAAAAP///////////wAAAA/////////////5+fj//vwAAAAH/4//////////AAAAD/////////////n78f//PwAAAB/AH/////////8AAAAP////////////+fPg///PwAAAAAB//////////wAAAA/////////////598A///HwAAAAAf//////////AAAAD/////////////3nzgf//H4AAAAP//////////8AAAAP/////////////eefgD/wAAAAAD///////////wAAAA/////////////97z+kAAfAcAAH////////////AAAAD/////////////3OP7f///////////////////8AAAAP/////////////Mx/s////////////////////wAAAA/////////////83P+Z////////////////////AAAAD/////////////zZ/4H///////////////////8AAAAP/////////////tH//////////////////////wAAAA/////////////+c///////////////////////AAAAD/////////////4n//////////////////////8AAAAP/////////////w///////////////////////wAAAA//////////////H///////////////////////AAAAD/////////////////////////////////////8AAAAP/////////////////////////////////////wAAAA",
+                        Image: "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CCHD4AAAAAASAH/AEAAA//4AAAAAAAAAAAOBwP/5/H4488/gAAAAAAgAf4AKAAD//gAAAAAAAAAAA8Hgf/j8fzzxx+AAAAAAAUB/wCAAAD/8AAAAAAAAAAADgcD/+fx/OOPP4AAAAAAQEP/AggAAH/AAAAAAAAAAAAPPA44/AAHg8ccAAAAAABAgf8ECAAAH4AAAAAAAAAAAA44Hnn8AAcDzzwAAAAAACAT/xAIAAAOAAAAAAAAAAAADzwOefwABwPPPAAAAAAAQBH/AAAAAA8AAAAAAAAAAAAP+AP/5//AH/n/gAAAAAAAB/5ACAAADgAAAAAAAAAAAA/8Af/j/+Af+P+AAAAAACAF/4AIAAAPAAAAAAAAAAAAD/wD/+f/4B/5/4AAAAAAIAP/AAgAAA4AAAAAAAAAAAAAB/AHA4H/ngADgAAAAAAgAf8AEAAADwAAAAAAAAAAAAAH8A8Hgf8cAAeAAAAAAAAB/gARgAAfAAAwAAAAAAAAAAfwDwOB/54AB4AAAAAAFAH/ACHwAA8AAPAAAAAAAAAB+P//P4H/HA8/gAAAAAAAAf8BAfwAHwAH8AAAAAAAAAH8//8fgf+eBx+AAAAAAAUB/wJB/wAPAB/wAAAAAAAAAfz//z+B/54PP4AAAAAAIEP+Agn/wB8Af/AAAAAAAAAB/54AH/AH88AeAAAAAAAggf8ECH/4DwH/4AAAAAAAAAH/ngA/8AfjwDwAAAAAACgT/xAgP/wfB/+AAAAAAAAAAf+eAB/wB/PAPAAAAAAAACH/AAgP/58f/wAAAAAAAAAOf/+B4B/AH//gAAAAAABSB/5BSAf////+AAAAAAAAAA8//8DgD+Af/+AAAAAAAAIJ/4EIA/////wAAAAAAAAADj//wOAPwB//4AAAAAAAQUP/CAAB////8AAAAAAAAAAAAAAHnHg8AAAAAAAAAABAQ/8CCAB////gAAAAAAAAAAAAAA88cDgAAAAAAAAAACAB/xAIAD///4AAAAAAAAAAAAAABxxwPAAAAAAAAAAAQBH/AAgAH///AAAAAAAAAAAP//+PPHHvH///gAAAAAAAC/5AAAAP//4AAAAAAAAAAA///8ccceef//+AAAAAACAC/IAIAAP//AAAAAAAAAAAD///zzxxxx///4AAAAAAIAJ6AAgAAf/wAAAAAAAAAAAP///HH+H/n///gAAAAAAgANUAEAAAf+AAAAAAAAAAAA4AA88/gf8eAAeAAAAAACgDKgAQAAB/gAAAAAAAAAAADwADxx+B/54AA4AAAAAACAHvACAAAB+AAAAAAAAAAAAOP+PPP/2/Hn/ngAAAAAABA/4CgAAAP4AAAAAAAAAAAA8/88ccfweeP+OAAAAAAAIB/wIAAAAfgAAAAAAAAAAADj/jzzx+Bx5/54AAAAAAAEH/AgAAAD+AAAAAAAAAAAAPP/PHH//DHj/jgAAAAAABgf8EAAAAH4AAAAAAAAAAAA4/488/j8Aef+eAAAAAAP+f/9f8AAA/gAAAAAAAAAAADz/zxx+P4B4/44AAAAAA//P/j/wAAB+AAAAAAAAAAAAOP+PPP4/CHn/ngAAAAAD/6/1//AAAP4AAAAAAAAAAAA8/88cfgeeeP+OAAAAAAP/9fX/8AAAfgAAAAAAAAAAADj/jzz+Bxx5/54AAAAAA//15//wAAD+AAAAAAAAAAAAPP+PHH+HvHj/DgAAAAAD//7P//AAAH4AAAAAAAAAAAA4AA8A/8DgeAAeAAAAAAP//F//8AAAfAAAAAAAAAAAADwADwB/wPB4AA4AAAAAA///X//wAAA8AAAAAAAAAAAAP///AH/A+H///gAAAAAAAAAAAAAAAAAAAAAAAAAAAAA///8AD8Aef//+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///wAPwBx///4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///AA/AHH///gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB/A/OBsPfwzhw/AYDA5+H4AAAAAAAAAAAAAAAAAAAAAH+P84Owx/jMHH+BgMDf9/gAAAAAAAAAAAAAAAAAAAAAYd45/zHGHMY84cGAf9w2DAAAAAAAAAAAAAAAAAAAAABh2Bn/M4YMzHzAwYB/gDAcAAAAAAAAAAAAAAAAAAAAAH+YDOc/hgzGbcfB/nuD8PwAAAAAAAAAAAAAAAAAAAAAf7gc7j/GDs7tx8H+Mw/j+AAAAAAAAAAAAAAAAAAAAAB7mAxuOOYOz8zAAcc7DwfAAAAAAAAAAAAAAAAAAAAAAGHYGHwwZgzPjMABgz8YBgAAAAAAAAAAAAAAAAAAAAAAYcw4PDhmPMeMYcGHHhx3HAAAAAAAAAAAAAAAAAAAAAB/j/A4P+f4zwx/gf4eH+f4AAAAAAAAAAAAAAAAAAAAAH8H4Dg/x+DGDD8B/g4H4fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwDgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAQAADAOAAAAAAAAAAAAAAAAAABAAAAAAAAAAAADg4fwH8YDv/4fgAMYGP8Y4MAccB+Bw/gwOAAAAAAAAAMDD/g/5gM//n/ABzg5/7ngwBxwP8GH/HAwAAAAAAAAA4OeHHjnVxwYcOADGBjDuPDAHDy44c8OMDAAAAAAAAADAxgc4Ef+HDjgcAc4OcG58MAcP/DBjA5wMAAAAAAAAAODmA7gA/4OGOAwfxgYwdj4wBwf8OHMBzAwAAAAAAAAAwM4DsADjgw4wDH/P/nXudzAHBxg4ZwHf/AAAAAAAAADg7gG4AHMDhjAM/8f+P+YzsAcDOBh3Ac/8AAAAAAAAAMDOA7gAdwMOMBzBzi5/jnOwBwO4OGcBnBwAAAAAAAAA4OcDmAA/A4Y4HMDGBjAGMfAHAfAYcwHMDAAAAAAAAADAxwccGD4Djjw5wc4OcA5w8AcB8Dhjg5wMAAAAAAAAAP/j/w/4HgP+H/jAxgYwBjBwP/DwH/H/DA4AAAAAAAAA/8H8D/AcA/4P8cDODnAOcHB/4OA/4P4cHAAAAAAAAAAkgGgBwAQAkgHAAEIAAAAQEBJAAAkgNAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABhAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
                     },
                 },
                 { PrintText: { Text: "<<->>" }, },
@@ -107,6 +109,8 @@ class Order {
                 'Content-Type': 'application/json',
                 "Authorization": "Basic " + Buffer.from(process.env.KKM_USER + ":" + process.env.KKM_PASSWORD).toString('base64')  },
         })
+        const json = await result.json()
+        console.log(json)
         return true
     }
 
@@ -222,7 +226,20 @@ class Order {
 
 
 
-    async RegisterCheck(NumDevice, TypeCheck, IsBarCode, my_aray_letters, cart, slip, isFiscal) {
+    async printFiscal(data) {
+        const kkmServer = data.kkmServer
+        const isFiscal = true
+        const slip = data.slip || ""
+        const NumDevice = data.printer || 0
+        const TypeCheck = data.typeCheck
+        const IsBarCode = data.isBarCode
+
+        const my_aray_letters = this.returnArrayLetters(String(data.route))
+
+
+        let cart = data.items
+
+
         let cartSum = function(){
 
             return cart.reduce((sum, current) => {
@@ -418,7 +435,7 @@ class Order {
         };
 
         // Вызов команды
-        return this.ExecuteCommand(Data);
+        return await this.ExecuteCommand(Data, kkmServer);
 
 
     }
@@ -614,7 +631,7 @@ class Order {
         };
 
         // Вызов команды
-        return this.ExecuteCommand(Data);
+        return await this.ExecuteCommand(Data);
 
 
     }
@@ -804,7 +821,7 @@ class Order {
         };
 
         // Вызов команды
-        return this.ExecuteCommand(Data);
+        return await this.ExecuteCommand(Data);
 
         // Возвращается JSON:
         //{
@@ -835,12 +852,17 @@ class Order {
         };
 
         // Вызов команды
-        return this.ExecuteCommand(Data);
+        return await this.ExecuteCommand(Data);
     }
 
 
 // Оплата безналом
-    async PaymentByPaymentCard(NumDevice, sum) {
+    async payTerminal(data) {
+        let kkmServer = data.kkmServer
+        let NumDevice = 0
+        let sum = data.items.reduce((sum, current) => {
+                return sum + current.count * current.price
+            }, 0);
 
         // Подготовка данных команды
         var Data = {
@@ -853,7 +875,7 @@ class Order {
         }
 
         // Вызов команды
-        return this.ExecuteCommand(Data);
+        return await this.ExecuteCommand(Data, kkmServer);
     }
 
     async ReturnPaymentByPaymentCard(NumDevice, data, operation) {
