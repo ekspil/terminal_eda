@@ -53,7 +53,7 @@ module.exports = async function (fastify, opts) {
 
   fastify.post('/api/kassa/setPayed/', async (request, reply) => {
 
-    const res = await kassa.setPayed(request.body)
+    const res = await kassa.setPayed(request.body, order)
     await fastify.io.emit("fullCheck", global.Orders)
     return {ok: true, res}
 

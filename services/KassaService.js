@@ -282,7 +282,7 @@ class Order {
 
 
 
-    async setPayed(data){
+    async setPayed(data, orderService){
         return this.OrderModel.sequelize.transaction(async (transaction) => {
             const order = await this.OrderModel.findOne({
                 where: {
@@ -346,6 +346,8 @@ class Order {
                 }
                 return p
             })
+            orderGlobal.timeStart = new Date().getTime()
+            await orderService.checkItems(orderGlobal)
             global.Orders.push(orderGlobal)
             await order.save({transaction})
             return true
