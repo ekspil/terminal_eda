@@ -88,19 +88,76 @@ class Order {
                 },
                 { PrintText: { Text: "<<->>" }, },
                 { PrintText: { Text: "<<->>" }, },
+                {
+                    PrintText: {
+                        Text: ">#0#< РЕЙС: " + order.dataValues.route,
+                        Font: 1, // 1-4, 0 - по настройкам ККМ
+                        Intensity: 15, // 1-15, 0 - по настройкам ККМ
+                    },
+                },
+                { PrintText: { Text: "<<->>" }, },
+                { PrintText: { Text: "<<->>" }, },
+                { PrintText: { Text: "Вылет/Прилет" }, },
 
             ],
         };
+        let cornerArray = []
+
+        for(let pos of order.positions){
+            let c = cornerArray.find(i => i === pos.corner)
+            if(!c) cornerArray.push(pos.corner)
+        }
+
+        for(let cor of cornerArray) {
+            let string = {
+                        PrintText: {
+                            Text: "<#1#>> Владивосток/"+String(cor).toUpperCase() ,
+                            Font: 2, // 1-4, 0 - по настройкам ККМ
+                            Intensity: 15, // 1-15, 0 - по настройкам ККМ
+                        },
+                    }
+            Data.CheckStrings.push(string)
+        }
+
+        Data.CheckStrings.push({
+            PrintText: {
+                Text: "<#1#>> Проверьте правильность выхода на посадку",
+                Font: 3, // 1-4, 0 - по настройкам ККМ
+                Intensity: 15, // 1-15, 0 - по настройкам ККМ
+            },
+        })
+
+        Data.CheckStrings.push({ PrintText: { Text: "<<->>" }, })
+        Data.CheckStrings.push({ PrintText: { Text: "<<->>" }, })
+        Data.CheckStrings.push({ PrintText: { Text: "<<->>" }, })
+
+
+
+
 
         for(let pos of order.positions){
 
             const string = {
                 PrintText: {
-                    Text: pos.name + "<#1#>"+ pos.price + "  " + pos.count + "  " + (pos.price * pos.count)
+                    Text: pos.name + "<#1#>"+ pos.price + "  " + pos.count + "  " + (pos.price * pos.count).toFixed(1) + " руб"
                 },
             }
             Data.CheckStrings.push(string)
         }
+
+
+        Data.CheckStrings.push({ PrintText: { Text: "<<->>" }, })
+
+        let  summa = order.positions.reduce((sum, current) => {
+            return sum + current.count * current.price
+        }, 0);
+        Data.CheckStrings.push({
+            PrintText: {
+                Text: "<#1#>>ИТОГО: "+summa.toFixed(1)+" руб." ,
+                Font: 2, // 1-4, 0 - по настройкам ККМ
+                Intensity: 15, // 1-15, 0 - по настройкам ККМ
+            },
+        })
 
         const result = await fetch(`http://${process.env.KKM_SERVER}/Execute`, {
             method: 'post',
