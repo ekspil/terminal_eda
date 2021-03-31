@@ -50,5 +50,27 @@ module.exports = async function (fastify, opts) {
     const result = await res.json()
     return {ok: true, result}
   })
+
+  fastify.post('/api/kassa/setPayed/', async (request, reply) => {
+
+    const res = await kassa.setPayed(request.body)
+    await fastify.io.emit("fullCheck", global.Orders)
+    return {ok: true, res}
+
+  })
+
+  fastify.post('/api/kassa/xReport/', async (request, reply) => {
+
+    const res = await kassa.xReport(request.body)
+    return {ok: true, res}
+
+  })
+
+  fastify.post('/api/kassa/zReport/', async (request, reply) => {
+
+    const res = await kassa.zReport(request.body)
+    return {ok: true, res}
+
+  })
 }
 

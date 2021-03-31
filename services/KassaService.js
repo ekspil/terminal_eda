@@ -110,8 +110,7 @@ class Order {
                 "Authorization": "Basic " + Buffer.from(process.env.KKM_USER + ":" + process.env.KKM_PASSWORD).toString('base64')  },
         })
         const json = await result.json()
-        console.log(json)
-        return true
+        return json
     }
 
     async newOrder(type){
@@ -213,11 +212,85 @@ class Order {
             // })
             await order.save({transaction})
             try{
-                await this.print({...order, positions: itemsDTO }, printer)
+                return await this.print({...order, positions: itemsDTO }, printer)
             }catch (e) {
                 console.log("Can't find printer ip: "+process.env.KKM_SERVER + " . Printer: "+printer)
                 return false
             }
+            return true
+
+        })
+
+    }
+
+
+
+    async setPayed(data){
+        return this.OrderModel.sequelize.transaction(async (transaction) => {
+            const order = await this.OrderModel.findOne({
+                where: {
+                    route: data.route
+                },
+                order:[
+                    ["id", "DESC"]
+                ],
+                transaction
+            })
+            if(!order) return {ok: false, error: "Order not found"}
+            await this.OrderItemsModel.destroy({
+                where: {
+                    order_id: order.id
+                },
+                transaction
+            })
+            const itemsDTO = data.items.map(item => {
+                item.order_id = order.id
+                delete item.id
+                return item
+            })
+
+            await this.OrderItemsModel.bulkCreate(itemsDTO, {transaction})
+            order.type = data.type
+            order.status = "PAYED"
+            const orderGlobal = {
+                id: "T-"+order.route,
+                die: 0,
+                alarm: 0,
+                action: "PAYED",
+                payed: 1,
+                ready: 0,
+                takeOut: 0,
+                type: data.type,
+                source: "KASSA",
+                flag: "",
+                amount: 0,
+                guestName: "",
+                extId: "",
+                text: "",
+                pin: "",
+                status: data.status,
+                cornerReady: [],
+                hidden: [],
+                positions: []
+            }
+
+
+            orderGlobal.status = data.status
+
+            orderGlobal.positions = data.items.map(p => {
+                if(!p.code) return p
+                const pos = global.Products.find(item => item.code === p.code)
+                if(pos) {
+                    p.name = pos.name
+                    p.corner = pos.corner
+                    const c = orderGlobal.cornerReady.find(i => i.corner === pos.corner)
+                    if(!c) orderGlobal.cornerReady.push({ corner: pos.corner, status: "NOTREADY" })
+
+                }
+                return p
+            })
+            global.Orders.push(orderGlobal)
+            await order.save({transaction})
             return true
 
         })
@@ -234,7 +307,7 @@ class Order {
         const TypeCheck = data.typeCheck
         const IsBarCode = data.isBarCode
 
-        const my_aray_letters = this.returnArrayLetters(String(data.route))
+        const my_aray_letters = await this.returnArrayLetters(String(data.route))
 
 
         let cart = data.items
@@ -799,7 +872,9 @@ class Order {
     }
 
 // Печать закрытия смены
-    async CloseShift(NumDevice) {
+    async zReport(data) {
+        let NumDevice = data.printer || 0
+        let kkmServer = data.kkmServer
 
         // Подготовка данных команды
         var Data = {
@@ -821,7 +896,7 @@ class Order {
         };
 
         // Вызов команды
-        return await this.ExecuteCommand(Data);
+        return await this.ExecuteCommand(Data, kkmServer);
 
         // Возвращается JSON:
         //{
@@ -836,8 +911,11 @@ class Order {
     }
 
 // Печать X отчета
-    async XReport(NumDevice) {
+    async xReport(data) {
 
+
+        let NumDevice = data.printer || 0
+        let kkmServer = data.kkmServer
         // Подготовка данных команды
         var Data = {
             // Команда серверу
@@ -852,7 +930,7 @@ class Order {
         };
 
         // Вызов команды
-        return await this.ExecuteCommand(Data);
+        return await this.ExecuteCommand(Data, kkmServer);
     }
 
 
