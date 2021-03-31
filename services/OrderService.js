@@ -224,7 +224,7 @@ class Order {
             guestName: data.client_name,
             extId: "",
             text: data.comment,
-            pin: "",
+            pin: data.code,
             positions: []
         }
 
