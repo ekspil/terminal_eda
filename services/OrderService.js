@@ -23,12 +23,14 @@ class Order {
                     return st
                 })
             }
-            order.hidden.push(station)
+            if(station){
+                order.hidden.push(station)
+            }
+
             return order
 
         })
 
-        this.checkDone(orderId)
         return global.Orders
 
     }

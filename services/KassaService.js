@@ -366,7 +366,7 @@ class Order {
         const TypeCheck = data.typeCheck
         const IsBarCode = data.isBarCode
 
-        const my_aray_letters = await this.returnArrayLetters(String(data.route))
+        const my_aray_letters = await this.returnArrayLetters("T"+String(data.route))
 
 
         let cart = data.items
