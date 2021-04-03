@@ -174,28 +174,28 @@ class Order {
         if(!type) type = "IN"
         const order = await this.OrderModel.create()
         order.route = Number(String(order.id).slice(-3, 999))
-
-        const newOrder = {
-            id: "T-"+order.route,
-            die: 0,
-            alarm: 0,
-            action: "NEW",
-            payed: 0,
-            ready: 0,
-            takeOut: 0,
-            type: type || "IN",
-            source: "KASSA",
-            flag: "",
-            amount: 0,
-            guestName: "",
-            extId: "",
-            text: "",
-            pin: "",
-            cornerReady: [],
-            hidden: [],
-            positions: []
-        }
-        global.Orders.push(newOrder)
+        //
+        // const newOrder = {
+        //     id: "T-"+order.route,
+        //     die: 0,
+        //     alarm: 0,
+        //     action: "NEW",
+        //     payed: 0,
+        //     ready: 0,
+        //     takeOut: 0,
+        //     type: type || "IN",
+        //     source: "KASSA",
+        //     flag: "",
+        //     amount: 0,
+        //     guestName: "",
+        //     extId: "",
+        //     text: "",
+        //     pin: "",
+        //     cornerReady: [],
+        //     hidden: [],
+        //     positions: []
+        // }
+        // global.Orders.push(newOrder)
 
         order.type = type || "IN"
         return await order.save()
