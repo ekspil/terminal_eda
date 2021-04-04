@@ -17,6 +17,9 @@ const OrderItem = {
     code: {
         type: Sequelize.DataTypes.STRING,
     },
+    changed: {
+        type: Sequelize.DataTypes.BOOLEAN,
+    },
     corner: {
         type: Sequelize.DataTypes.STRING,
     },
