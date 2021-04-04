@@ -1,10 +1,11 @@
 class DB {
-    constructor({UserModel, ProductModel, ItemModel, ProductGroupModel, SmenaModel, io}) {
+    constructor({UserModel, ProductModel, ItemModel, ProductGroupModel, SmenaModel, ProductModModel, io}) {
         this.UserModel = UserModel
         this.ProductModel = ProductModel
         this.ProductGroupModel = ProductGroupModel
         this.ItemModel = ItemModel
         this.SmenaModel = SmenaModel
+        this.ProductModModel = ProductModModel
         this.io = io
     }
 
@@ -33,7 +34,18 @@ class DB {
         const users = await this.ProductModel.findAll({
             order: [['id', 'DESC']]
         })
-        return users
+
+        return users.map(item => {
+            if(!item.mods) item.mods = []
+            return item
+        })
+    }
+
+    async getAllMods(){
+        const mods = await this.ProductModModel.findAll({
+            order: [['id', 'DESC']]
+        })
+        return mods
     }
 
     async saveProduct(data){
@@ -56,6 +68,7 @@ class DB {
             product.code = data.code
             product.price = data.price
             product.corner = data.corner
+            product.mods = data.mods
             product.group_id = data.group_id
             return await product.save()
         }
@@ -133,6 +146,27 @@ class DB {
             user.login = data.login
             user.role = data.role
             return await user.save()
+        }
+    }
+    async saveMod(data){
+        if(!data.id){
+            const mod = await this.ProductModModel.create(data)
+            return mod
+        }
+        else {
+            const mod = await this.ProductModModel.findOne({
+                where: {
+                    id: data.id
+                }
+            })
+
+            if(data.action === "DELETE"){
+                return await mod.destroy()
+            }
+            mod.name = data.name
+            mod.items = data.items
+            mod.price = data.price
+            return await mod.save()
         }
     }
 

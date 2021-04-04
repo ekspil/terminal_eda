@@ -25,6 +25,7 @@ module.exports = async function (fastify, opts) {
   const Stat = require("./models/sequelize/Statistic")
   const Orders = require("./models/sequelize/Orders")
   const OrderItems = require("./models/sequelize/OrderItems")
+  const ProductMods = require("./models/sequelize/ProductMods")
   global.Orders = []
   global.KassaOrders = []
   global.Products = []
@@ -41,6 +42,7 @@ module.exports = async function (fastify, opts) {
   const StatModel = sequelize.define("statistics", Stat)
   const OrderModel = sequelize.define("orders", Orders)
   const OrderItemsModel = sequelize.define("order_items", OrderItems)
+  const ProductModModel = sequelize.define("product_mods", ProductMods)
 
   ProductModel.belongsTo(ProductGroupModel, {
     foreignKey: "group_id",
@@ -130,6 +132,7 @@ module.exports = async function (fastify, opts) {
     ProductGroupModel,
     SmenaModel,
     StatModel,
+    ProductModModel,
     io: fastify.io
   })
 
@@ -152,6 +155,7 @@ module.exports = async function (fastify, opts) {
     ProductGroupModel,
     SmenaModel,
     StatModel,
+    ProductModModel,
     io: fastify.io
   })
 

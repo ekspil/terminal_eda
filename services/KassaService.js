@@ -214,6 +214,15 @@ class Order {
         if(!order) return {error: "Маршрут не найден!"}
         const items = await order.getItems()
         order.items = items || []
+
+        for (let item of order.items){
+            const prod = await this.ProductModel.findOne({
+                where: {
+                    id: item.item_id
+                }
+            })
+            item.mods = prod.mods
+        }
         return {
             id: order.id,
             route: order.route,
@@ -245,6 +254,7 @@ class Order {
             })
             const itemsDTO = data.items.map(item => {
                 item.order_id = order.id
+                item.item_id = item.id
                 delete item.id
                 return item
             })
@@ -302,11 +312,13 @@ class Order {
             })
             const itemsDTO = data.items.map(item => {
                 item.order_id = order.id
+                item.item_id = item.id
                 delete item.id
                 return item
             })
 
             await this.OrderItemsModel.bulkCreate(itemsDTO, {transaction})
+
             order.type = data.type
             order.status = "PAYED"
             const orderGlobal = {
@@ -346,6 +358,29 @@ class Order {
                 }
                 return p
             })
+
+
+            for (let it of orderGlobal.positions){
+                if(!it.items || it.items.length === 0) continue
+                let mods = []
+                for (let prodId of it.items){
+                    const prod = await this.ProductModel.findOne({
+                        where: {
+                            id: prodId
+                        }
+                    })
+                    if(!prod) throw new Error('Не существует позиции из сэта')
+                    mods.push({
+                        name: prod.name,
+                        station: prod.station,
+                        id: prod.id
+                    })
+
+                }
+
+                it.mods = mods
+                it.station = -1
+            }
             orderGlobal.timeStart = new Date().getTime()
             await orderService.checkItems(orderGlobal)
             global.Orders.push(orderGlobal)

@@ -2,6 +2,7 @@
 const UserDTO = require("../models/dto/user")
 const GroupDTO = require("../models/dto/group")
 const ItemDTO = require("../models/dto/item")
+const ModDTO = require("../models/dto/mod")
 const ProductDTO = require("../models/dto/product")
 
 
@@ -197,6 +198,10 @@ module.exports = async function (fastify, opts) {
     const items = await db.getAllItems()
     return items.map(key => new ItemDTO(key))
   })
+  fastify.get('/api/terminal/mods/get', async (request, reply) => {
+    const mods = await db.getAllMods()
+    return mods.map(key => new ModDTO(key))
+  })
   fastify.post('/api/terminal/items/save', async (request, reply) => {
     const item = await db.saveItem(request.body)
     return new ItemDTO(item)
@@ -209,6 +214,9 @@ module.exports = async function (fastify, opts) {
   })
   fastify.post('/api/terminal/groups/save', async (request, reply) => {
     return await db.saveGroup(request.body)
+  })
+  fastify.post('/api/terminal/mods/save', async (request, reply) => {
+    return await db.saveMod(request.body)
   })
 }
 

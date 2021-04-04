@@ -7,6 +7,9 @@ const OrderItem = {
         primaryKey: true,
         autoIncrement: true
     },
+    item_id: {
+        type: Sequelize.DataTypes.INTEGER
+    },
     name: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
