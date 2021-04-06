@@ -229,7 +229,10 @@ class Order {
             status: order.status,
             type: order.type,
             items: items || [],
-            createdAt: order.createdAt
+            createdAt: order.createdAt,
+            payType: order.payType,
+            AuthorizationCode: order.AuthorizationCode,
+            RRNCode: order.RRNCode
         }
 
     }
@@ -321,6 +324,16 @@ class Order {
 
             order.type = data.type
             order.status = "PAYED"
+            order.payType = data.payType
+            if(data.status === "CANCELED"){
+                order.status = "CANCELED"
+            }
+            if(data.RRNCode){
+                order.RRNCode = data.RRNCode
+            }
+            if(data.AuthorizationCode){
+                order.AuthorizationCode = data.AuthorizationCode
+            }
             const orderGlobal = {
                 id: "T-"+order.route,
                 die: 0,
@@ -497,7 +510,7 @@ class Order {
             // Наличная оплата (2 знака после запятой)
             Cash: 0.00,
             // Сумма электронной оплаты (2 знака после запятой)
-            ElectronicPayment: cartSum().toFixed(2),
+            ElectronicPayment: 0.00,
             // Сумма из предоплаты (зачетом аванса) (2 знака после запятой)
             AdvancePayment: 0,
             // Сумма постоплатой(в кредит) (2 знака после запятой)
@@ -506,6 +519,14 @@ class Order {
             CashProvision: 0,
 
         };
+
+        const summa = cartSum().toFixed(2)
+        if(data.payType === "CASH"){
+            data.Cash = summa
+        }
+        if(data.payType === "CASHLESS"){
+            data.ElectronicPayment = summa
+        }
 
         for(let n in slip)  {
 

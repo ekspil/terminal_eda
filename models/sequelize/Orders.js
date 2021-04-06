@@ -10,12 +10,27 @@ const Order = {
     route: {
         type: Sequelize.DataTypes.INTEGER,
     },
+    sum: {
+        type: Sequelize.DataTypes.FLOAT,
+    },
     type: {
 
         type: Sequelize.DataTypes.STRING,
     },
     status: {
         type: Sequelize.DataTypes.STRING,
+    },
+    payType: {
+        type: Sequelize.DataTypes.STRING,
+        field: "pay_type"
+    },
+    RRNCode: {
+        type: Sequelize.DataTypes.STRING,
+        field: "rrn_code"
+    },
+    AuthorizationCode: {
+        type: Sequelize.DataTypes.STRING,
+        field: "auth_code"
     },
     createdAt: {
         type: Sequelize.DataTypes.DATE,
