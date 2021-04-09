@@ -1063,7 +1063,7 @@ class Order {
             NumDevice: NumDevice,
             CardNumber: "",
             Amount: sum,
-            ReceiptNumber: "TEST-01",
+            ReceiptNumber: data.id,
             IdCommand: this.guid(),
         }
 
@@ -1071,25 +1071,29 @@ class Order {
         return await this.ExecuteCommand(Data, kkmServer);
     }
 
-    async ReturnPaymentByPaymentCard(NumDevice, data, operation) {
+    async returnChekPayment(data) {
+
+        const sum = data.items.reduce((sum, current) => {
+            return sum + current.count * current.price
+        }, 0);
 
 
         var Data = {
             Command: "ReturnPaymentByPaymentCard",
-            NumDevice: NumDevice,
+            NumDevice: 0,
             CardNumber: "",
 
-            Amount: data.order.sum,
+            Amount: sum,
 
-            ReceiptNumber: data.order.id,
-            RRNCode: data.order.RRNCode,
-            AuthorizationCode: data.order.AuthorizationCode,
+            ReceiptNumber: data.id,
+            RRNCode: data.RRNCode,
+            AuthorizationCode: data.AuthorizationCode,
             IdCommand: this.guid()
 
         };
 
 
-        return this.ExecuteCommand(Data, false, operation);
+        return await this.ExecuteCommand(Data, data.kkmServer);
 
     }
 

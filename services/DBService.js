@@ -175,6 +175,7 @@ class DB {
             plan: Number(data.plan),
             amount: 0,
             count: 0,
+            pin: data.pin,
             manager: Number(data.manager)
         }
         await this.SmenaModel.create(newSmena)

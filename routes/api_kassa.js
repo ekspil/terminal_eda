@@ -72,5 +72,12 @@ module.exports = async function (fastify, opts) {
     return {ok: true, res}
 
   })
+
+  fastify.post('/api/kassa/returnChekPayment/', async (request, reply) => {
+
+    const res = await kassa.returnChekPayment(request.body)
+    return {ok: true, res}
+
+  })
 }
 

@@ -21,6 +21,9 @@ const Smena = {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
     },
+    pin: {
+        type: Sequelize.DataTypes.STRING
+    },
     createdAt: {
         type: Sequelize.DataTypes.DATE,
         allowNull: true,
