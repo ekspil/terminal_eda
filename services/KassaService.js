@@ -1072,13 +1072,14 @@ class Order {
     }
 
     async returnChekPayment(data) {
+        let kkmServer = data.kkmServer
 
         const sum = data.items.reduce((sum, current) => {
             return sum + current.count * current.price
         }, 0);
 
 
-        var Data = {
+        let Data = {
             Command: "ReturnPaymentByPaymentCard",
             NumDevice: 0,
             CardNumber: "",
@@ -1093,7 +1094,7 @@ class Order {
         };
 
 
-        return await this.ExecuteCommand(Data, data.kkmServer);
+        return await this.ExecuteCommand(Data, kkmServer);
 
     }
 
