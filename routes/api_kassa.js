@@ -59,6 +59,13 @@ module.exports = async function (fastify, opts) {
 
   })
 
+  fastify.post('/api/kassa/setCanceled/', async (request, reply) => {
+
+    const res = await kassa.setCanceled(request.body)
+    return {ok: true, res}
+
+  })
+
   fastify.post('/api/kassa/xReport/', async (request, reply) => {
 
     const res = await kassa.xReport(request.body)
@@ -69,6 +76,7 @@ module.exports = async function (fastify, opts) {
   fastify.post('/api/kassa/zReport/', async (request, reply) => {
 
     const res = await kassa.zReport(request.body)
+    await kassa.Settlement(0)
     return {ok: true, res}
 
   })

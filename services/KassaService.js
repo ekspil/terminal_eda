@@ -293,6 +293,23 @@ class Order {
 
     }
 
+    async setCanceled(data){
+        return this.OrderModel.sequelize.transaction(async (transaction) => {
+            const order = await this.OrderModel.findOne({
+                where: {
+                    route: data.route
+                },
+                order: [
+                    ["id", "DESC"]
+                ],
+                transaction
+            })
+            if (!order) return {ok: false, error: "Order not found"}
+            order.status = "CANCELED"
+            order.save({transaction})
+        })
+    }
+
 
 
     async setPayed(data, orderService){
@@ -1099,6 +1116,7 @@ class Order {
     }
 
     async Settlement(NumDevice) {
+        if(!NumDevice) NumDevice = 0
 
         // Подготовка данных команды
         var Data = {
@@ -1114,7 +1132,7 @@ class Order {
         };
 
         // Вызов команды
-        return this.ExecuteCommand(Data);
+        return await this.ExecuteCommand(Data);
     }
 
 }
