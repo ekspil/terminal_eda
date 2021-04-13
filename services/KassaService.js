@@ -281,6 +281,7 @@ class Order {
             //     return p
             // })
             await order.save({transaction})
+            if(data.notPrint === true) return true
             try{
                 return await this.print({...order, positions: itemsDTO }, printer)
             }catch (e) {
