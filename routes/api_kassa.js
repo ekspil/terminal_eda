@@ -1,4 +1,8 @@
 'use strict'
+const fs = require('fs');
+const path = require('path');
+
+
 const UserDTO = require("../models/dto/user")
 const GroupDTO = require("../models/dto/group")
 const ItemDTO = require("../models/dto/item")
@@ -16,6 +20,20 @@ module.exports = async function (fastify, opts) {
 
   fastify.get('/api/kassa/getOrder/:orderId', async (request, reply) => {
     return kassa.getOrder(request.params.orderId)
+  })
+
+  fastify.get('/api/eo/getImgs', async (request, reply) => {
+
+    const files_ = [];
+    let files = fs.readdirSync('public/slider');
+    for (let i in files){
+      let name = files[i];
+        files_.push(name);
+
+    }
+    return files_;
+
+
   })
 
   fastify.get('/api/kassa/setStatus/:orderId/:status', async (request, reply) => {

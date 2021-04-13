@@ -60,3 +60,4 @@ profile*
 # generated code
 
 dist
+/public/slider/
