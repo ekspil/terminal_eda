@@ -295,20 +295,20 @@ class Order {
     }
 
     async setCanceled(data){
-        return this.OrderModel.sequelize.transaction(async (transaction) => {
             const order = await this.OrderModel.findOne({
                 where: {
                     route: data.route
                 },
                 order: [
                     ["id", "DESC"]
-                ],
-                transaction
+                ]
             })
             if (!order) return {ok: false, error: "Order not found"}
             order.status = "CANCELED"
-            order.save({transaction})
-        })
+            await order.save()
+
+            return {ok: true}
+
     }
 
 
