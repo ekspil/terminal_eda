@@ -94,7 +94,7 @@ module.exports = async function (fastify, opts) {
   fastify.post('/api/kassa/zReport/', async (request, reply) => {
 
     const res = await kassa.zReport(request.body)
-    await kassa.Settlement(0)
+    await kassa.Settlement(request.body)
     return {ok: true, res}
 
   })

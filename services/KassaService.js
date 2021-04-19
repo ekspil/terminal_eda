@@ -1116,8 +1116,10 @@ class Order {
 
     }
 
-    async Settlement(NumDevice) {
-        if(!NumDevice) NumDevice = 0
+    async Settlement(data) {
+
+        let NumDevice = data.printer || 0
+        let kkmServer = data.kkmServer
 
         // Подготовка данных команды
         var Data = {
@@ -1133,7 +1135,7 @@ class Order {
         };
 
         // Вызов команды
-        return await this.ExecuteCommand(Data);
+        return await this.ExecuteCommand(Data, kkmServer);
     }
 
 }
