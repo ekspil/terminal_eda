@@ -24,6 +24,7 @@ module.exports = async function (fastify, opts) {
   const ProductGroup = require("./models/sequelize/ProductGroup")
   const Stat = require("./models/sequelize/Statistic")
   const Orders = require("./models/sequelize/Orders")
+  const Timers = require("./models/sequelize/Timers")
   const OrderItems = require("./models/sequelize/OrderItems")
   const ProductMods = require("./models/sequelize/ProductMods")
   global.Orders = []
@@ -38,6 +39,7 @@ module.exports = async function (fastify, opts) {
   const SmenaModel = sequelize.define("smenas", Smena)
   const ProductModel = sequelize.define("products", Product)
   const ItemModel = sequelize.define("items", Item)
+  const TimerModel = sequelize.define("timers", Timers)
   const ProductGroupModel = sequelize.define("product_groups", ProductGroup)
   const StatModel = sequelize.define("statistics", Stat)
   const OrderModel = sequelize.define("orders", Orders)
@@ -132,6 +134,7 @@ module.exports = async function (fastify, opts) {
     ProductGroupModel,
     SmenaModel,
     StatModel,
+    TimerModel,
     ProductModModel,
     io: fastify.io
   })
@@ -145,6 +148,7 @@ module.exports = async function (fastify, opts) {
     StatModel,
     OrderModel,
     OrderItemsModel,
+    TimerModel,
     io: fastify.io
   })
 
@@ -156,6 +160,7 @@ module.exports = async function (fastify, opts) {
     SmenaModel,
     StatModel,
     ProductModModel,
+    TimerModel,
     io: fastify.io
   })
 
@@ -168,6 +173,7 @@ module.exports = async function (fastify, opts) {
     ProductGroupModel,
     SmenaModel,
     StatModel,
+    TimerModel,
     io: fastify.io
   })
 

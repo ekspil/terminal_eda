@@ -1,10 +1,11 @@
 const ItemDTO = require("../models/dto/item")
 
 class Order {
-    constructor({UserModel, ProductModel, ItemModel, io}) {
+    constructor({UserModel, ProductModel, ItemModel, TimerModel, io}) {
         this.UserModel = UserModel
         this.ProductModel = ProductModel
         this.ItemModel = ItemModel
+        this.TimerModel = TimerModel
         this.io = io
         this.checkItems = this.checkItems.bind(this)
         this.change = this.change.bind(this)
@@ -20,6 +21,16 @@ class Order {
                 order.cornerReady = order.cornerReady.map(st => {
                     if(st.corner !== corner) return st
                     st.status = status
+                    if(status === "READY" && !st.readyTime){
+                        st.readyTime = new Date().getTime()
+                        this.TimerModel.create({
+                            corner: st.corner,
+                            start: order.timeStart,
+                            end: st.readyTime,
+                            orderId: order.id
+                        })
+
+                    }
                     return st
                 })
             }
@@ -74,6 +85,7 @@ class Order {
                     p.corner = pos.corner
                     const c = data.cornerReady.find(i => i.corner === pos.corner)
                     if(!c) data.cornerReady.push({ corner: pos.corner, status: "NOTREADY" })
+
 
                 }
                 return p
