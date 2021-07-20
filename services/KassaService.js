@@ -1118,7 +1118,7 @@ class Order {
 
     async Settlement(data) {
 
-        let NumDevice = data.printer || 0
+        let NumDevice = 0
         let kkmServer = data.kkmServer
 
         // Подготовка данных команды
