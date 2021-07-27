@@ -224,7 +224,7 @@ class Order {
 
     superdostavka(data, opts){
         const order = {
-            id: "SD-"+String(data.id).substr(-5),
+            id: String(data.id).substr(-5),
             die: 0,
             alarm: 0,
             action: opts.action,
@@ -236,7 +236,7 @@ class Order {
             flag: "",
             amount: data.sum,
             guestName: data.client_name,
-            extId: "",
+            extId: data.id,
             text: data.comment,
             pin: data.code,
             positions: []

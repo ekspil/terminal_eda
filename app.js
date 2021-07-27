@@ -105,7 +105,7 @@ module.exports = async function (fastify, opts) {
   // await ProductGroupModel.bulkCreate(gs)
   // await ProductModel.bulkCreate(ps)
   // await SmenaModel.bulkCreate(ss)
-
+  //
 
 
   const Order = require("./services/OrderService")
