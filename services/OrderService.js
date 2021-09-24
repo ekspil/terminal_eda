@@ -51,7 +51,7 @@ class Order {
         if(!order) throw new Error("No such order")
 
         for (let i of order.cornerReady){
-            if(corner === i.corner) i.status = "DONE"
+            if(corner === i.corner || corner === "ALL") i.status = "DONE"
             if (i.status !== "DONE") return false
 
         }
@@ -104,17 +104,33 @@ class Order {
                 data.hidden = []
             }
 
+
+
+
+
             const order = global.Orders.find(order => order.id === data.id);
             if (!order) {
                 global.Orders.push(data);
-                return global.Orders
             }
-            global.Orders = global.Orders.map(order => {
-                if (order.id === data.id) return data;
-                return order;
-            });
+            else {
+                global.Orders = global.Orders.map(order => {
+                    if (order.id === data.id) return data;
+                    return order;
+                });
+            }
+
         }
-        return Orders
+
+
+        ///bus corner NOT_SHOW
+
+        if(data.corner === "bus"){
+            this.checkDone(data.id, "ALL")
+        }
+
+
+        ///
+        return global.Orders
     }
     async startItems(){
         let items = await this.ItemModel.findAll({})

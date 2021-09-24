@@ -4,6 +4,7 @@ const GroupDTO = require("../models/dto/group")
 const ItemDTO = require("../models/dto/item")
 const ModDTO = require("../models/dto/mod")
 const ProductDTO = require("../models/dto/product")
+const CornerDTO = require("../models/dto/corner")
 
 
 module.exports = async function (fastify, opts) {
@@ -189,6 +190,14 @@ module.exports = async function (fastify, opts) {
   fastify.post('/api/terminal/products/save', async (request, reply) => {
     const product = await db.saveProduct(request.body)
     return new ProductDTO(product)
+  })
+  fastify.get('/api/terminal/corners/get', async (request, reply) => {
+    const products = await db.getAllCorners()
+    return products.map(key => new CornerDTO(key))
+  })
+  fastify.post('/api/terminal/corners/save', async (request, reply) => {
+    const corner = await db.saveCorner(request.body)
+    return new CornerDTO(corner)
   })
   fastify.get('/api/terminal/groups/get', async (request, reply) => {
     const groups = await db.getAllGroups()

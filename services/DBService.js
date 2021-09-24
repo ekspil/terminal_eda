@@ -1,11 +1,12 @@
 class DB {
-    constructor({UserModel, ProductModel, ItemModel, ProductGroupModel, SmenaModel, ProductModModel, io}) {
+    constructor({UserModel, ProductModel, ItemModel, ProductGroupModel, SmenaModel, ProductModModel, CornerModel, io}) {
         this.UserModel = UserModel
         this.ProductModel = ProductModel
         this.ProductGroupModel = ProductGroupModel
         this.ItemModel = ItemModel
         this.SmenaModel = SmenaModel
         this.ProductModModel = ProductModModel
+        this.CornerModel = CornerModel
         this.io = io
     }
 
@@ -46,6 +47,13 @@ class DB {
             order: [['id', 'DESC']]
         })
         return mods
+    }
+
+    async getAllCorners(){
+        const corners = await this.CornerModel.findAll({
+            order: [['id', 'DESC']]
+        })
+        return corners
     }
 
     async saveProduct(data){
@@ -89,6 +97,24 @@ class DB {
             }
             group.name = data.name
             return await group.save()
+        }
+    }
+    async saveCorner(data){
+        if(!data.id){
+            const corner = await this.CornerModel.create(data)
+            return corner
+        }
+        else {
+            const corner = await this.CornerModel.findOne({
+                where: {
+                    id: data.id
+                }
+            })
+            if(data.action === "DELETE"){
+                return await corner.destroy()
+            }
+            corner.name = data.name
+            return await corner.save()
         }
     }
 
