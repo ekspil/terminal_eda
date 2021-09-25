@@ -377,10 +377,23 @@ class Order {
 
             orderGlobal.status = data.status
 
+            /// bus
+            let notShow = false
+
+            ////
+
+
+
             orderGlobal.positions = data.items.map(p => {
                 if(!p.code) return p
                 const pos = global.Products.find(item => item.code === p.code)
                 if(pos) {
+
+                    /// bus
+                    if(pos.corner === "bus") notShow = true
+
+                    ////
+
                     p.name = pos.name
                     p.corner = pos.corner
                     const c = orderGlobal.cornerReady.find(i => i.corner === pos.corner)
@@ -414,6 +427,18 @@ class Order {
             }
             orderGlobal.timeStart = new Date().getTime()
             await orderService.checkItems(orderGlobal)
+
+            ////// bus not show
+            if(notShow){
+                await order.save({transaction})
+                return true
+            }
+
+            /// bus not show
+
+
+
+
             global.Orders.push(orderGlobal)
             await order.save({transaction})
             return true
