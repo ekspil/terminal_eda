@@ -31,8 +31,17 @@ class DB {
         return users
     }
 
-    async getAllProducts(){
+    async getAllProducts(query){
+        const {archive} = query
+        const where = {}
+        const { Op } = require("sequelize");
+        if(!archive){
+            where.archive = {
+                [Op.not]: true,
+            }
+        }
         const users = await this.ProductModel.findAll({
+            where,
             order: [['id', 'DESC']]
         })
 
@@ -68,6 +77,10 @@ class DB {
                 }
             })
             if(data.action === "DELETE"){
+                if(!product.archive){
+                    product.archive = true
+                    return await product.save()
+                }
                 return await product.destroy()
             }
             product.name = data.name
@@ -77,6 +90,7 @@ class DB {
             product.price = data.price
             product.corner = data.corner
             product.mods = data.mods
+            product.archive = data.archive
             product.group_id = data.group_id
             return await product.save()
         }
@@ -114,6 +128,8 @@ class DB {
                 return await corner.destroy()
             }
             corner.name = data.name
+            corner.uid = data.uid
+            corner.gate = data.gate
             return await corner.save()
         }
     }

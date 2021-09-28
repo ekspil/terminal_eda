@@ -29,6 +29,9 @@ const Product = {
     station: {
         type: Sequelize.DataTypes.INTEGER,
     },
+    archive: {
+        type: Sequelize.DataTypes.BOOLEAN,
+    },
     createdAt: {
         type: Sequelize.DataTypes.DATE,
         allowNull: true,

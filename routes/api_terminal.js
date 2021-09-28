@@ -184,7 +184,7 @@ module.exports = async function (fastify, opts) {
     return new UserDTO(user)
   })
   fastify.get('/api/terminal/products/get', async (request, reply) => {
-    const products = await db.getAllProducts()
+    const products = await db.getAllProducts(request.query)
     return products.map(key => new ProductDTO(key))
   })
   fastify.post('/api/terminal/products/save', async (request, reply) => {

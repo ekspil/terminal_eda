@@ -7,9 +7,14 @@ const Corners = {
         primaryKey: true,
         autoIncrement: true
     },
+    uid: {
+        type: Sequelize.DataTypes.STRING
+    },
     name: {
-        type: Sequelize.DataTypes.STRING,
-        allowNull: false,
+        type: Sequelize.DataTypes.STRING
+    },
+    gate: {
+        type: Sequelize.DataTypes.STRING
     },
     createdAt: {
         type: Sequelize.DataTypes.DATE,
