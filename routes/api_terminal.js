@@ -7,9 +7,11 @@ const ProductDTO = require("../models/dto/product")
 const CornerDTO = require("../models/dto/corner")
 
 
+
+
 module.exports = async function (fastify, opts) {
 
-  const {order, db, fetch} = opts
+  const {order, db, fetch, darall} = opts
 
 
   fastify.get('/api/terminal/ext/new', async (request, reply) => {
@@ -19,6 +21,12 @@ module.exports = async function (fastify, opts) {
     })
     const json = await result.json()
     const data = await order.change(json, "superdostavka")
+
+    if(json.address && json.address.city && json.address.street && json.delivery_time_local){
+      const text = darall.parseDataToTextEmail(json)
+      await darall.sendEmailDarall("ТерминалЕда Заказ №" + request.query.order_id, text)
+    }
+
     await fastify.io.emit("fullCheck", data)
 
     await fastify.io.emit("fullItems", global.Items)

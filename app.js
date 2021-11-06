@@ -114,6 +114,7 @@ module.exports = async function (fastify, opts) {
   const Kassa = require("./services/KassaService")
   const DB = require("./services/DBService")
   const Schedule = require("./services/ScheduleService")
+  const Darall = require("./services/MailService")
 
 
 
@@ -141,7 +142,7 @@ module.exports = async function (fastify, opts) {
     CornerModel,
     io: fastify.io
   })
-
+  opts.darall = new Darall()
   opts.kassa = new Kassa({
     UserModel,
     ItemModel,
