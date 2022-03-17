@@ -38,9 +38,9 @@ class MailService {
         let text = `
 Новый заказ №${data.id}
 Источник: ТерминалЕда
-Дата создания: ${new Date(now).toLocaleString()}
-Время забора: ${new Date(now + (10 * 60 * 1000)).toLocaleString()}
-Время доставки: ${new Date(data.delivery_time_local).toLocaleString()}
+Дата создания: ${new Date(now).toLocaleString("ru-RU")}
+Время забора: ${new Date(now + (10 * 60 * 1000)).toLocaleString("ru-RU")}
+Время доставки: ${new Date(data.delivery_time_local).toLocaleString("ru-RU")}
 Имя клиента: ${data.client_name}
 Телефон клиента: ${data.client_phone}
 Адрес откуда: г.Владивосток, ул.Батарейная 3а
