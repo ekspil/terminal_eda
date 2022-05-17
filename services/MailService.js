@@ -33,14 +33,19 @@ class MailService {
 
     }
 
+    getStringDate(date){
+        const stringDate = `${("0" + date.getDate()).slice(-2)}.${("0" + (date.getMonth()+1)).slice(-2)}.${date.getFullYear()}, ${("0" + date.getHours()).slice(-2)}:${("0" + date.getMinutes()).slice(-2)}:${("0" + date.getSeconds()).slice(-2)}`
+        return stringDate
+    }
+
     parseDataToTextEmail(data){
         const now = new Date().getTime()
         let text = `
 Новый заказ №${data.id}
 Источник: ТерминалЕда
-Дата создания: ${new Date(now).toLocaleString("ru-RU")}
-Время забора: ${new Date(now + (10 * 60 * 1000)).toLocaleString("ru-RU")}
-Время доставки: ${new Date(data.delivery_time_local).toLocaleString("ru-RU")}
+Дата создания: ${this.getStringDate(new Date(now))}
+Время забора: ${this.getStringDate(new Date(now + (10 * 60 * 1000)))}
+Время доставки: ${this.getStringDate(new Date(data.delivery_time_local))}
 Имя клиента: ${data.client_name}
 Телефон клиента: ${data.client_phone}
 Адрес откуда: г.Владивосток, ул.Батарейная 3а
